@@ -7,7 +7,7 @@ public class WebSocketRunnerSetting {
     // private String ip = "192.168.14.215";
 //        private String ip = "192.168.16.133";
     private int port = 80;
-    public static boolean isGWClient = false;
+    public static boolean isGWClient = true;
     public static int numOfEndPoints = 1;
 
     public String getIp() {

@@ -1,12 +1,14 @@
 package com.hellokoding.springboot.bean;
 
+import com.hellokoding.springboot.UserController1;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-import static com.hellokoding.springboot.HelloController.hash_map_readtext;
-
+import static com.hellokoding.springboot.OrderController.orderAction;
+import static com.hellokoding.springboot.UserController1.*;
 public class WebClientUtils {
 
     public class MultiExchangeReqMeta_InternalTmp {
@@ -19,7 +21,7 @@ public class WebClientUtils {
 
     private static JSONHandler jsonHandler = new JSONHandler();
     private static List<String> requestList = new ArrayList<>();
-    private static String currentAction;
+    private static String currentAction ="2";
     private int orderQty;
     private static final String EXCHANGE_TDWL = "TDWL";
     private static final String SYMBOL_1010 = "1010";
@@ -31,6 +33,7 @@ public class WebClientUtils {
     private static final int execBrokerID = 1;
     private static int populatedRequestsCount = 1;
     private MultiExchangeReqMeta_InternalTmp multiExchangeReqMeta_internalTmp;
+    private static String request;
 
     public static JSONHandler getJsonHandler() {
         return jsonHandler;
@@ -123,15 +126,6 @@ public class WebClientUtils {
         requestList.add(request);
     }
 
-//    public static void main(String[] args) {
-//        System.out.println("test");
-//        WebClientUtils utils = new WebClientUtils();
-//        utils.populateRequests(true, 2, 2, null);
-//        for (int i = 0; i < requestList.size(); i++) {
-//            String s = requestList.get(i);
-//            System.out.println("request : = " + s);
-//        }
-//    }
 
     public boolean processCommandLind() {
         Scanner scanner = new Scanner(System.in);
@@ -148,32 +142,24 @@ public class WebClientUtils {
         }
         System.out.print("\nSelect Action  : \n(2:CreateOrders\n3:Amend Order\n4:Cancel Order\n" +
                 "7:Order List\n-2:Stat Gather,ReGrp,Persist\n-3:Stat Clear,\n-4:Print Rest Response,\n5:JMS MSG SEND\n9:CreateOrders For DefinedExchanges\n21:Approve Order\n42:Resend Order\nDefault:Print) :- ");
-        String action = hash_map_readtext.get("readParam");
-        currentAction = action;
+        String action ;//="4";
+        action = orderAction;
 
         if (action.trim().equals(Integer.toString(OMSConst.SERVICE_ID_CREATE_ORDER_NEW)) || action.trim().equals("9")) {
-            System.out.print("Number of orders:");
-            String orderCount = hash_map_readtext.get("noOfOrders");
-            System.out.print("Order qty:");
-            String orderQtyStr = hash_map_readtext.get("orderQty");
-            try {
-                orderQty = Integer.parseInt(orderQtyStr);
-            } catch (NumberFormatException e) {
 
-            }
-            populateRequests(true, Integer.parseInt(orderCount), Integer.parseInt(action), cashAcntCountsString);
+
+            populateRequests(true, userRepository1.findById((long)userRepository1.count()).get().getNoOfOrders(), Integer.parseInt(action), cashAcntCountsString);
+
         } else if ("3".equals(action.trim())) {
-            System.out.print("ClOrderID:");
-            String clOrdID = scanner.next().trim();
-            System.out.print("Order qty:");
-            String orderQtyStr = scanner.next();
-            try {
-                orderQty = Integer.parseInt(orderQtyStr);
-            } catch (NumberFormatException e) {
+            //System.out.print("ClOrderID:");
+            String clOrdID = hashMap_amendOrder.get(Integer.toString(hashMap_amendOrder.size())).getClOrdID();
+            // System.out.print("Order qty:");
+            // String orderQtyStr = scanner.next();
 
-            }
-            System.out.print("Price:");
-            String priceStr = scanner.next();
+            orderQty = hashMap_amendOrder.get(Integer.toString(hashMap_amendOrder.size())).getOrderQty();
+
+//            System.out.print("Price:");
+            String priceStr =hashMap_amendOrder.get(Integer.toString(hashMap_amendOrder.size())).getPrice();
             try {
                 price = Integer.parseInt(priceStr);
             } catch (NumberFormatException e) {
@@ -181,8 +167,8 @@ public class WebClientUtils {
             }
             populateAmendOrCancelRequest(true, OMSConst.SERVICE_ID_CREATE_ORDER_CHANGE, clOrdID);
         } else if ("4".equals(action.trim())) {
-            System.out.print("ClOrderID:");
-            String clOrdID = scanner.next().trim();
+            //System.out.print("ClOrderID:");
+            String clOrdID = hashMap_cancelOrder.get(Integer.toString(hashMap_cancelOrder.size())).getClOrdID();
             populateAmendOrCancelRequest(true, OMSConst.SERVICE_ID_CREATE_ORDER_CANCEL, clOrdID);
         } else if ("21".equals(action.trim())) {
             System.out.print("ClOrderID:");
@@ -235,12 +221,13 @@ public class WebClientUtils {
 
     private String generateOrderRequest(Order order, int requestSequence,
                                         List<MultiExchangeReqMeta_InternalTmp> multiExchangeReqMeta_internalTmps, int cashAcntID) {
+        OrderParams orderParams =parameterRepository.findById((long)parameterRepository.count()).get();
         if (cashAcntID > 0) {
             requestSequence = cashAcntID;
         } else {
             requestSequence = requestSequence % 500;
         }
-        int orderChannel = 1;   //DT-1, AT-3
+        int orderChannel = orderParams.getOrderChannel();   //DT-1, AT-3
         OrderRequestBean orderRequestBean = new OrderRequestBean();
         orderRequestBean.getOmsMsgHeader().setRequestType(OMSConst.SERVICE_ID_CREATE_ORDER_NEW);
         orderRequestBean.getOmsMsgHeader().setChannel(orderChannel);
@@ -248,8 +235,12 @@ public class WebClientUtils {
         orderRequestBean.getOmsMsgHeader().setUnqReqId(Integer.toString(requestSequence));
         orderRequestBean.setOrder(order);
         order.setTenantCode(OMSConst.DEFAULT_TENANCY_CODE);
+        order.setTenantCode(orderParams.getTenantCode());
         order.setOrderMode(OMSConst.ORDER_MODE_NORMAL);
+        order.setOrderMode(orderParams.getOrderMode());
         order.setType(FIX.T40_LIMIT);//1:Market,2:Limit
+        order.setType(orderParams.getType().charAt(0));
+        orderQty = userRepository1.findById((long)userRepository1.count()).get().getOrderQty();
         order.setQuantity(orderQty);
         if (orderQty <= 0) {
             order.setQuantity(qty);
@@ -257,10 +248,13 @@ public class WebClientUtils {
 //        order.setCustomerID(customerID);
         order.setCustomerID(requestSequence);
         order.setSide(FIX.T54_BUY);//1:Buy,2:Sell
-//        order.setCashAcntId((requestSequence % 298) + 1);
+        order.setSide(orderParams.getSide());
+        order.setCashAcntID((requestSequence % 298) + 1);
         if (multiExchangeReqMeta_internalTmps == null || multiExchangeReqMeta_internalTmps.size() == 0) {
             order.setSymbol(SYMBOL_1010);
+            order.setSymbol(orderParams.getSymbol());
             order.setExchange(EXCHANGE_TDWL);
+            order.setExchange(orderParams.getExchange());
             order.setTradingAccountID((requestSequence % 298) + 1);
             order.setExecBrokerID(execBrokerID);
             orderRequestBean.getOmsMsgHeader().setLoginID(order.getTradingAccountID()); //for the timebeing tradingAcntID=loginID mapping is exist in DB
@@ -268,7 +262,9 @@ public class WebClientUtils {
             int index = requestSequence % (multiExchangeReqMeta_internalTmps.size());
             multiExchangeReqMeta_internalTmp = multiExchangeReqMeta_internalTmps.get(index);
             order.setSymbol(multiExchangeReqMeta_internalTmp.symbol);
+            order.setSymbol(orderParams.getSymbol());
             order.setExchange(multiExchangeReqMeta_internalTmp.exchange);
+            order.setExchange(orderParams.getExchange());
             order.setTradingAccountID(multiExchangeReqMeta_internalTmp.tradingAcntID);
             order.setExecBrokerID(multiExchangeReqMeta_internalTmp.execBrokerID);
             orderRequestBean.getOmsMsgHeader().setLoginID(multiExchangeReqMeta_internalTmp.loginID);
@@ -282,11 +278,12 @@ public class WebClientUtils {
 //        order.setExecBrokerID(execBrokerID);
         order.setAction(OMSConst.ORDER_ACTION_NEW);
         order.setTIF(FIX.T59_DAY);
-        order.setOrderMode(OMSConst.ORDER_MODE_NORMAL);
+      //  order.setOrderMode(OMSConst.ORDER_MODE_NORMAL);
         order.setPriceInstType(FIX.T167_INSTRUMENT_BOND);
         if (orderChannel == OMSConst.CHANNEL_DT) {
             order.setDealerID(dealerID);
         }
+        order.setDealerID(orderParams.getDealerID());
         if (FIX.T40_LIMIT == order.getType()) {
             order.setPrice(price);
         }

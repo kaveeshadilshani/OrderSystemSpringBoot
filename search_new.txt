@@ -1,0 +1,20 @@
+ public List<Object> cacheSearch_new(CacheSearchTnsObject cacheSearchTnsObject) {
+        // get the DSL query factory, to be used for constructing the Query object:
+        EmbeddedCacheManager cacheManager = cacheManagerFactoryI.getCacheManagerI(cacheSearchTnsObject.getTenant()).getCacheManager();
+        Cache targetCache = cacheManager.getCache(cacheSearchTnsObject.getCacheName());
+        List<CacheSearchTnsObject.Filter> filters1 = new ArrayList<>();
+        filters1=(cacheSearchTnsObject.getFilters());
+        String name=filters1.get(0).getFieldName();
+        String value=filters1.get(0).getFieldValue();
+
+        QueryFactory qf = Search.getQueryFactory(targetCache);
+       
+        // create a query
+        Query query = qf.from(cacheSearchTnsObject.getEntityClass())
+                .having(name).eq(value)
+                .build();
+        // get the results
+        List<Object> entriesList = query.list();
+        return entriesList;
+
+    }

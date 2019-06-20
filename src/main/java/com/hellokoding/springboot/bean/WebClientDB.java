@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.StringTokenizer;
-
-import static com.hellokoding.springboot.HelloController.hash_map_readtext;
+import static com.hellokoding.springboot.UserController1.parameterRepository;
+import static com.hellokoding.springboot.UserController1.userRepository1;
 
 public class WebClientDB {
     public class MultiExchangeReq_InternalTmp {
@@ -207,7 +207,17 @@ public class WebClientDB {
 
     private String generateOrderRequest(Order order, int requestSequence,
                                         List<WebClientDB.MultiExchangeReq_InternalTmp> multiExchangeReq_internalTmps, DatabaseEntries databaseEntries) {
-        int orderChannel = 12;   //DT-1, AT-3
+        OrderParams orderParams =parameterRepository.findById((long)parameterRepository.count()).get();
+        System.out.println(orderParams.getOrderChannel() );
+        System.out.println(orderParams.getPrice());
+        System.out.println(orderParams.getType() );
+        System.out.println(orderParams.getSymbol() );
+        System.out.println(orderParams.getTenantCode() );
+        System.out.println(orderParams.getMarketCode() );
+        System.out.println(orderParams.getExchange() );
+
+
+        int orderChannel = orderParams.getOrderChannel();   //DT-1, AT-3
         OrderRequestBean orderRequestBean = new OrderRequestBean();
         orderRequestBean.getOmsMsgHeader().setRequestType(OMSConst.SERVICE_ID_CREATE_ORDER_NEW);
         orderRequestBean.getOmsMsgHeader().setChannel(orderChannel);
@@ -217,8 +227,11 @@ public class WebClientDB {
         orderRequestBean.getOmsMsgHeader().setUnqReqId(uniqueID);
         orderRequestBean.setOrder(order);
         order.setTenantCode(OMSConst.DEFAULT_TENANCY_CODE);
+        order.setTenantCode(orderParams.getTenantCode());
         order.setOrderMode(OMSConst.ORDER_MODE_NORMAL);
+        order.setOrderMode(orderParams.getOrderMode());
         order.setType(FIX.T40_LIMIT);//1:Market,2:Limit
+        order.setType(orderParams.getType().charAt(0));
         order.setQuantity(orderQty);
         if (orderQty <= 0) {
             order.setQuantity(qty);
@@ -226,10 +239,13 @@ public class WebClientDB {
 //        order.setCustomerID(customerID);
         order.setCustomerID(requestSequence);
         order.setSide(FIX.T54_BUY);//1:Buy,2:Sell
+        order.setSide(orderParams.getSide());
         order.setCashAcntID(databaseEntries.cashAcntID);
         if (multiExchangeReq_internalTmps == null || multiExchangeReq_internalTmps.size() == 0) {
             order.setSymbol(SYMBOL_1010);
+            order.setSymbol(orderParams.getSymbol());
             order.setExchange(EXCHANGE_TDWL);
+            order.setExchange(orderParams.getExchange());
 //            order.setTradingAccountID((requestSequence % 298) + 1);
             order.setTradingAccountID(databaseEntries.tradingAcntID);
             order.setExecBrokerID(execBrokerID);
@@ -267,7 +283,7 @@ public class WebClientDB {
             return null;
         }
         String jsonResponse = jsonHandler.getJSonString(orderRequestBean);
-        System.out.println("\n Order Request: cashAcntID:" + order.getCashAcntID() + ",trdAcntId:" + order.getTradingAccountID() + ":" + requestSequence);
+       // System.out.println("\n Order Request: cashAcntID:" + order.getCashAcntID() + ",trdAcntId:" + order.getTradingAccountID() + ":" + requestSequence);
         return jsonResponse;
     }
 
@@ -290,24 +306,22 @@ public class WebClientDB {
         readDetails = readCustomerDetails(textLocation);
         System.out.print("\nSelect Action  : c(2:CreateOrders\n3:Amend Order\n4:Cancel Order\n" +
                 "7:Order List\n-2:Stat Gather,ReGrp,Persist\n-3:Stat Clear,\n-4:Print Rest Response,\n5:JMS MSG SEND\n9:CreateOrders For DefinedExchanges\n21:Approve Order\n42:Resend Order\nDefault:Print) :- ");
-       // System.out.println(hash_map_readtext.get("readParam"));
-        String action = "9";//hash_map_readtext.get("readParam");
+
+        String action = "2";
 
         currentAction = action;
 
         if (action.trim().equals(Integer.toString(OMSConst.SERVICE_ID_CREATE_ORDER_NEW)) || action.trim().equals("9")) {
             System.out.print("Number of orders:");
-            String orderCount = "3";//hash_map_readtext.get("noOfOrders");
-            System.out.println(orderCount);
-            System.out.print("Order Qty:");
-            String orderQtyStr = "5";//hash_map_readtext.get("orderQty");
-            System.out.println(orderQtyStr);
+            System.out.println(userRepository1.findById((long)userRepository1.count()).get().getNoOfOrders() );
+            System.out.print("Order Quantity:");
+            System.out.println(userRepository1.findById((long)userRepository1.count()).get().getOrderQty());
             try {
-                orderQty = Integer.parseInt(orderQtyStr);
+                orderQty = userRepository1.findById((long)userRepository1.count()).get().getOrderQty();
             } catch (NumberFormatException e) {
 
             }
-            populateRequests(true, Integer.parseInt(orderCount), Integer.parseInt(action), readDetails);
+            populateRequests(true, userRepository1.findById((long)userRepository1.count()).get().getNoOfOrders(), Integer.parseInt(action), readDetails);
         }
         return true;
     }

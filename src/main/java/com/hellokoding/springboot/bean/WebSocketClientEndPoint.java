@@ -1,18 +1,23 @@
 package com.hellokoding.springboot.bean;
 
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-
+import com.hellokoding.springboot.OrderController;
 import javax.websocket.*;
 import java.io.IOException;
 import java.net.URI;
 
+
+import static com.hellokoding.springboot.OrderController.responseList;
+
+
 @ClientEndpoint
+
 public class WebSocketClientEndPoint {
     Session userSession = null;
     private MessageHandler messageHandler;
     public static int responseCount = 0;
     private URI endpointURI;
+
+    public WebSocketClientEndPoint(){}
 
     public WebSocketClientEndPoint(URI endpointURI) {
         try {
@@ -58,7 +63,6 @@ public class WebSocketClientEndPoint {
     public void onOpen(Session userSession) {
         System.out.println("opening web socket");
         this.userSession = userSession;
-
     }
 
     /**
@@ -71,7 +75,7 @@ public class WebSocketClientEndPoint {
     public void onClose(Session userSession, CloseReason reason) {
         System.out.println("closing web socket:" + reason.getReasonPhrase() + "," + reason.getCloseCode());
         this.userSession = null;
-//        System.exit(1);
+//      System.exit(1);
     }
 
     /**
@@ -82,7 +86,11 @@ public class WebSocketClientEndPoint {
     @OnMessage
     public void onMessage(String message) {
         responseCount++;
-        System.out.println("On Message:" + message + ", response count:" + responseCount);
+        OrderController orderController = new OrderController();
+        responseList.add(responseCount + message);
+        System.out.println("On Message:" + message + " response count:" + responseCount);
+
+        // System.out.println(" response count:" + responseCount);
         if (messageHandler != null) {
             messageHandler.handleMessage(message);
         }
@@ -102,16 +110,14 @@ public class WebSocketClientEndPoint {
     public void addMessageHandler(MessageHandler msgHandler) {
         messageHandler = msgHandler;
     }
-
-
-
     /**
      * Send a message.
      *
      * @param message
      */
 
-    public void sendMessage(String message) {
+
+    public void sendMessage1(String message) {
         try {
             /*
              ByteBuffer buf = ByteBuffer.allocate(message.length()*2);
@@ -139,14 +145,12 @@ public class WebSocketClientEndPoint {
             }
         }
     }
-
     /**
      * Message handler.
      *
      * @author Jiji_Sasidharan
      */
     public static interface MessageHandler {
-
         public void handleMessage(String message);
     }
 
