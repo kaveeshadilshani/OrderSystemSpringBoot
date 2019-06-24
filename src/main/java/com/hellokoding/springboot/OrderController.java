@@ -24,6 +24,8 @@ public class OrderController {
     public static String orderAction = "2";
     private static WebSocketRunnerSetting settings;
     private static List<WebSocketClientEndPoint> clientEndPoints;
+    private WebSocketClientEndPoint webSocketClientEndPoint;
+    private  WebSocketClientEndPoint.MessageHandler messageHandler;
 
     @ResponseStatus(value = HttpStatus.OK)
     @RequestMapping(value = "/startOrder")
@@ -184,7 +186,7 @@ public class OrderController {
             settings.setIp(userRepository1.findById((long) noOfRequests).get().getIp());
             settings.setPort(userRepository1.findById((long) noOfRequests).get().getPort());
 //            settings.setGWClient(hashMap_ordersPerTimeSlice.get(Integer.toString(hashMap_ordersPerTimeSlice.size()-1)).isGWClient());
-            settings.setGWClient(false);
+            settings.setGWClient(true);
             settings.setNumOfEndPoints(userRepository1.findById((long) noOfRequests).get().getEndpoint());
             System.out.println(settings.getIp());
             if(clientEndPoints!= null){
@@ -212,11 +214,45 @@ public class OrderController {
         } else {//rest
             System.out.println("\n Connecting to :" + "ws://127.0.0.1:9080/streaming-api");
             for (int i = 0; i < settings.getNumOfEndPoints(); i++) {
-                WebSocketClientEndPoint clientEndPoint = new WebSocketClientEndPoint(new URI("ws://192.168.16.106:9080/streaming-api"));
+                WebSocketClientEndPoint clientEndPoint = new WebSocketClientEndPoint(new URI("ws://192.168.0.50:9080/streaming-api"));
                 clientEndPoints.add(clientEndPoint);
+                webSocketClientEndPoint = clientEndPoint;
+              //  setup();
             }
         }
         return clientEndPoints;
+    }
+    @ResponseStatus(value = HttpStatus.OK)
+    @RequestMapping(value = "/setup")
+    public void setup(){
+        OtherUtils otherUtils = OtherUtils.getOtherUtils();
+//        webSocketClientEndPoint = WebSocketClientEndPoint.getInstance();
+        messageHandler =  new WebSocketClientEndPoint.MessageHandler();
+        Map<Integer, RequestBean<LoginReqDataBean>> login ;
+        CommonHeader commonHeader = new CommonHeader();
+        commonHeader.setMsgTyp(1);
+        commonHeader.setTenantCode("DEFAULT_TENANT");
+        commonHeader.setCommVer("DFNUAWEB_AIOLOS_M_1.000.02.882+82b0a229");
+        commonHeader.setSesnId("");
+        commonHeader.setLoginId(0);
+        commonHeader.setChannel(1);
+        commonHeader.setClientIp("192.168.16.106");
+        commonHeader.setUnqReqId("0_1538998178633");
+        commonHeader.setRouteId(0);
+        LoginReqDataBean dataBean = new LoginReqDataBean();
+        dataBean.setLgnNme( "das_1");
+        dataBean.setPwd("123");
+        RequestBean reqBean = new RequestBean();
+        reqBean.setCommonHeader(commonHeader);
+        reqBean.setDataBean(dataBean);
+        Map<Integer, RequestBean<LoginReqDataBean>> loginBeanMap = new HashMap<>();
+        loginBeanMap.put(reqBean.getCommonHeader().getChannel(), reqBean);
+        String requestIdLogin = "CommonClientlogin" + System.currentTimeMillis() + "1";
+        loginBeanMap.get(1).getCommonHeader().setUnqReqId(requestIdLogin);
+        //otherUtils.create_sessions(loginBeanMap);
+        clientEndPoints.get(0).sendMessage(loginBeanMap.get(1));
+        ResponseBean<LoginResDataBean> responseBean = messageHandler.getResponseDetails(webSocketClientEndPoint, loginBeanMap.get(1).getCommonHeader().getUnqReqId(),1);
+        System.out.println(responseBean);
     }
 }
 

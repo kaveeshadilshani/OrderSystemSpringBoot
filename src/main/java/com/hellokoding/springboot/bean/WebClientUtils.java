@@ -231,6 +231,7 @@ public class WebClientUtils {
         OrderRequestBean orderRequestBean = new OrderRequestBean();
         orderRequestBean.getOmsMsgHeader().setRequestType(OMSConst.SERVICE_ID_CREATE_ORDER_NEW);
         orderRequestBean.getOmsMsgHeader().setChannel(orderChannel);
+        orderRequestBean.getOmsMsgHeader().setSessionID("5da15054-99bc-4a39-b628-98f53b098091");
 //        orderRequestBean.getOmsMsgHeader().setLoginID(customerID);
         orderRequestBean.getOmsMsgHeader().setUnqReqId(Integer.toString(requestSequence));
         orderRequestBean.setOrder(order);

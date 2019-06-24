@@ -1,10 +1,12 @@
 package com.hellokoding.springboot.bean;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hellokoding.springboot.OrderController;
 import javax.websocket.*;
 import java.io.IOException;
 import java.net.URI;
-
+import java.util.Map;
 
 import static com.hellokoding.springboot.OrderController.responseList;
 
@@ -13,13 +15,18 @@ import static com.hellokoding.springboot.OrderController.responseList;
 
 public class WebSocketClientEndPoint {
     Session userSession = null;
-    private MessageHandler messageHandler;
+  // private MessageHandler messageHandler;
     public static int responseCount = 0;
     private URI endpointURI;
+    private ObjectMapper objectMapper;
+    private static WebSocketClientEndPoint webSocketClientEndPoint;
+    private  static Map<String, ResponseBean> commonResponseMap;
+
 
     public WebSocketClientEndPoint(){}
 
     public WebSocketClientEndPoint(URI endpointURI) {
+        objectMapper = new ObjectMapper();
         try {
 //            String isClient=System.getProperties().get("DFN_STAT_CLIENT")+"";
 //            if(isClient!=null && isClient.trim().equals("1")){
@@ -86,14 +93,16 @@ public class WebSocketClientEndPoint {
     @OnMessage
     public void onMessage(String message) {
         responseCount++;
-        OrderController orderController = new OrderController();
+//        OrderController orderController = new OrderController();
         responseList.add(responseCount + message);
         System.out.println("On Message:" + message + " response count:" + responseCount);
 
+
         // System.out.println(" response count:" + responseCount);
-        if (messageHandler != null) {
-            messageHandler.handleMessage(message);
-        }
+//        if (messageHandler != null) {
+//            messageHandler.handleMessage(message);
+//        }
+
     }
 
     @OnError
@@ -107,9 +116,9 @@ public class WebSocketClientEndPoint {
      *
      * @param msgHandler
      */
-    public void addMessageHandler(MessageHandler msgHandler) {
-        messageHandler = msgHandler;
-    }
+//    public void addMessageHandler(MessageHandler msgHandler) {
+//        messageHandler = msgHandler;
+//    }
     /**
      * Send a message.
      *
@@ -150,8 +159,75 @@ public class WebSocketClientEndPoint {
      *
      * @author Jiji_Sasidharan
      */
-    public static interface MessageHandler {
-        public void handleMessage(String message);
+    public static class MessageHandler {
+
+//        public void handleMessage(String message);
+public ResponseBean getResponseDetails(WebSocketClientEndPoint webSocketClientEndPoint, String requestId, int messageType) {
+    if (messageType != 1) {
+
+        ResponseBean responseBean;
+        while (true) {
+            responseBean = webSocketClientEndPoint.getCommonResponseMap().get(requestId);
+            if (responseBean != null) {
+                break;
+            }
+        }
+        if (responseBean.getCommonHeader().getMsgTyp() != messageType) {
+            webSocketClientEndPoint.getCommonResponseMap().remove(requestId);
+            return getResponseDetails(webSocketClientEndPoint, requestId, messageType);
+        }
+
+        return responseBean;
+    } else {
+        return handleResponseLogin(webSocketClientEndPoint, requestId);
+    }
+}
+
+        private ResponseBean handleResponseLogin(WebSocketClientEndPoint webSocketDirecter, String requestId) {
+            long defaultTimeout = System.currentTimeMillis();
+            ResponseBean responseBean = null;
+            while (responseBean == null) {
+                responseBean = webSocketDirecter.getCommonResponseMap().get(requestId);
+            }
+
+            return responseBean;
+        }
+
+    }
+
+    public void sendMessage(RequestBean requestBean) {
+        if (userSession == null || !userSession.isOpen()) {
+            try {
+                ContainerProvider.getWebSocketContainer().connectToServer(this, endpointURI);
+            } catch (Exception e) {
+                System.out.println("Error in sending request bean"+ e);
+            }
+        }
+        directMessage(requestBean);
+
+
+
+    }
+
+    private void directMessage(RequestBean requestBean) {
+        try {
+            String message = objectMapper.writeValueAsString(requestBean);
+            userSession.getAsyncRemote().sendText(message);
+            System.out.println("Message Sent " + message);
+        } catch (JsonProcessingException e) {
+            System.out.println("JsonProcessingException ," + e.getMessage());
+        }
+    }
+
+    public static WebSocketClientEndPoint getInstance() {
+        if (webSocketClientEndPoint == null)
+            webSocketClientEndPoint = new WebSocketClientEndPoint();
+        return webSocketClientEndPoint;
+    }
+
+
+    public Map<String, ResponseBean> getCommonResponseMap() {
+        return commonResponseMap;
     }
 
 
