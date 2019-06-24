@@ -1,0 +1,35 @@
+- HED:
+    msgTyp: 1
+    channel: 1
+    commVer: "DFNUAWEB_AIOLOS_M_1.000.02.882+82b0a229"
+    loginId: ""
+    sesnId: ""
+    clientIp: "192.168.16.108"
+    tenantCode: "DEFAULT_TENANT"
+    unqReqId: "0_1538998178633"
+  DAT:
+    lgnNme: "IGNL2_UApp_User1"
+    pwd: "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3"
+
+- HED:
+    channel: 7
+    tenantCode: "DEFAULT_TENANT"
+    loginId: 3
+    msgTyp: 1
+    unqReqId: "F80FEEF6-5FB8-D792-E71B-167A2B9C669C"
+  DAT:
+    lgnNme: "IGNL2_Aura_User"
+    pwd: "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3"
+
+- HED:
+    msgTyp: 1
+    channel: 12
+    commVer: "6.01.003.00"
+    loginId: ""
+    sesnId: ""
+    clientIp: "192.168.16.108"
+    tenantCode: "DEFAULT_TENANT"
+    unqReqId: "ManualUniqueRequestIdLogin"
+  DAT:
+    lgnNme: "IGNL2_DT_User"
+    pwd: "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3"
