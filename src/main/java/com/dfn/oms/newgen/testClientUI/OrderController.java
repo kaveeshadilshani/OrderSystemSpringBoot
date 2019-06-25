@@ -19,6 +19,7 @@ public class OrderController {
     private static List<WebSocketClientEndPoint> clientEndPoints;
     private WebSocketClientEndPoint webSocketClientEndPoint;
     private  WebSocketClientEndPoint.MessageHandler messageHandler;
+    public static String sessionID;
 
     @ResponseStatus(value = HttpStatus.OK)
     @RequestMapping(value = "/startOrder")
@@ -45,64 +46,64 @@ public class OrderController {
             int sentCount;
             String orderPerTimeSLice = "500:1";
             int a = 1;
-            if (orderPerTimeSLice != null) {
-                String orderPerSlice = orderPerTimeSLice.split(":")[0];
-               // String timePeriod = orderPerTimeSLice.split(":")[1];
-                String timePeriod = Integer.toString(UserController1.hashMap_ordersPerTimeSlice.get(Integer.toString(UserController1.hashMap_ordersPerTimeSlice.size()-1)).getTimePeriod());
+            if (UserController1.hashMap_ordersPerTimeSlice.size() != 1) {
+                while(true) {
+                    String orderPerSlice = orderPerTimeSLice.split(":")[0];
+                    // String timePeriod = orderPerTimeSLice.split(":")[1];
+                    String timePeriod = Integer.toString(UserController1.hashMap_ordersPerTimeSlice.get(Integer.toString(UserController1.hashMap_ordersPerTimeSlice.size() - 1)).getTimePeriod());
 //                int ordersPerSec = Integer.parseInt(orderPerSlice);
-                int ordersPerSec  = UserController1.hashMap_ordersPerTimeSlice.get(Integer.toString(UserController1.hashMap_ordersPerTimeSlice.size()-1)).getOrderPerSlice();
-                int i = 0;
-                long timeSpread = 0;
-                long startTime = System.currentTimeMillis();
-                long start = System.currentTimeMillis();
-                long timePeriodForOrders = Long.parseLong(timePeriod) * 1000;
-                System.out.println("== Placing timed orders, Order per period:" + orderPerSlice + ", period(Seconds):" + timePeriod);
-                int orderLoopCount = 0;
-                while (threadStatus) {
-                    if (webSocketRunner.operatingMethod) {
-                        WebClientDB webClientDB_internalTemp = new WebClientDB(textLocation);
-                        webSocketRunner.status = webClientDB_internalTemp.inputCommandLine();
-                        WebSocketRunner.requestList = webClientDB_internalTemp.getRequestList();
-                    } else {
-                        WebClientUtils webClientUtilsInternalTmp = new WebClientUtils();
-                        webSocketRunner.status = webClientUtilsInternalTmp.processCommandLind();
-                        WebSocketRunner.requestList = WebClientUtils.getRequestList();
-                    }
-                    if (webSocketRunner.status) {
-                        for (int j = 0; j < WebSocketRunner.requestList.size(); j++) {
-                            i++;
-                            String s = WebSocketRunner.requestList.get(j);
-                            orderLoopCount++;
-
-                            if (settings.getNumOfEndPoints() > 1) {
-                                clientEndPoints.get(j % settings.getNumOfEndPoints()).sendMessage1(s);
-                            } else {
-                                clientEndPoints.get(0).sendMessage1(s);
-                            }
-
-                            long end = System.currentTimeMillis();
-                            long duration = end - start;
-                            timeList.add(duration);
-                            if (i >= ordersPerSec) {
-                                System.out.println("more than orders per sec");
-                                timeSpread = System.currentTimeMillis() - startTime;
-                                if (timeSpread < timePeriodForOrders) {
-                                    System.out.println("sleep");
-                                    Thread.sleep(timePeriodForOrders - timeSpread); //sleep time time period per orders is reached
-                                }
-                                i = 0; // reInit order count
-                                startTime = System.currentTimeMillis(); //re init time spread calc
-                            }
+                    int ordersPerSec = UserController1.hashMap_ordersPerTimeSlice.get(Integer.toString(UserController1.hashMap_ordersPerTimeSlice.size() - 1)).getOrderPerSlice();
+                    int i = 0;
+                    long timeSpread = 0;
+                    long startTime = System.currentTimeMillis();
+                    long start = System.currentTimeMillis();
+                    long timePeriodForOrders = Long.parseLong(timePeriod) * 1000;
+                    System.out.println("== Placing timed orders, Order per period:" + orderPerSlice + ", period(Seconds):" + timePeriod);
+                    int orderLoopCount = 0;
+                    while (threadStatus) {
+                        if (webSocketRunner.operatingMethod) {
+                            WebClientDB webClientDB_internalTemp = new WebClientDB(textLocation);
+                            webSocketRunner.status = webClientDB_internalTemp.inputCommandLine();
+                            WebSocketRunner.requestList = webClientDB_internalTemp.getRequestList();
+                        } else {
+                            WebClientUtils webClientUtilsInternalTmp = new WebClientUtils();
+                            webSocketRunner.status = webClientUtilsInternalTmp.processCommandLind();
+                            WebSocketRunner.requestList = WebClientUtils.getRequestList();
                         }
-                        System.out.println("All sent");
-                    }
+                        if (webSocketRunner.status) {
+                            for (int j = 0; j < WebSocketRunner.requestList.size(); j++) {
+                                i++;
+                                String s = WebSocketRunner.requestList.get(j);
+                                orderLoopCount++;
+                                if (settings.getNumOfEndPoints() > 1) {
+                                    clientEndPoints.get(j % settings.getNumOfEndPoints()).sendMessage1(s);
+                                } else {
+                                    clientEndPoints.get(0).sendMessage1(s);
+                                }
+                                long end = System.currentTimeMillis();
+                                long duration = end - start;
+                                timeList.add(duration);
+                                if (i >= ordersPerSec) {
+                                    System.out.println("more than orders per sec");
+                                    timeSpread = System.currentTimeMillis() - startTime;
+                                    if (timeSpread < timePeriodForOrders) {
+                                        System.out.println("sleep");
+                                        Thread.sleep(timePeriodForOrders - timeSpread); //sleep time time period per orders is reached
+                                    }
+                                    i = 0; // reInit order count
+                                    startTime = System.currentTimeMillis(); //re init time spread calc
+                                }
+                            }
+                            System.out.println("All sent");
+                        }
 //                    a++;
-                    threadStatus = false;
-                    WebSocketRunner.requestList.clear();
-                    System.out.println("\n Request sent count:" + orderLoopCount + "\n\n\n");
-                    //logger.info("LN:138", "==Orders placed:" + orderLoopCount);
-                    if (orderLoopCount >= Integer.MAX_VALUE) {
-                        threadStatus = false;
+                       // threadStatus = false;
+                        WebSocketRunner.requestList.clear();
+                        System.out.println("\n Request sent count:" + orderLoopCount + "\n\n\n");
+                        //logger.info("LN:138", "==Orders placed:" + orderLoopCount);
+                        if (orderLoopCount >= Integer.MAX_VALUE) {
+                            threadStatus = false;
+                        }
                     }
                 }
             } else {
@@ -121,11 +122,11 @@ public class OrderController {
                     if (webSocketRunner.status) {
                         for (int i = 0; i < WebSocketRunner.requestList.size(); i++) {
                             String s = WebSocketRunner.requestList.get(i);
-                            if (settings.getNumOfEndPoints() > 1) {
-                                clientEndPoints.get(i % settings.getNumOfEndPoints()).sendMessage1(s);
-                            } else {
+//                            if (settings.getNumOfEndPoints() > 1) {
+//                                clientEndPoints.get(i % settings.getNumOfEndPoints()).sendMessage1(s);
+//                            } else {
                                 clientEndPoints.get(0).sendMessage1(s);
-                            }
+//                            }
                             sentCount++;
                         }
                         WebSocketRunner.requestList.clear();
@@ -169,7 +170,7 @@ public class OrderController {
         WebSocketRunner webSocketRunner = new WebSocketRunner();
         String textLocation = (webSocketRunner.TEXT_PATH);
         OrdersPerTimeSlice ordersPerTimeSlice = new OrdersPerTimeSlice();
-        ordersPerTimeSlice.setOrderPerSlice(500);
+        ordersPerTimeSlice.setOrderPerSlice(700);
         ordersPerTimeSlice.setTimePeriod(1);
         ordersPerTimeSlice.setGWClient(false);
         UserController1.hashMap_ordersPerTimeSlice.put("0",ordersPerTimeSlice);
@@ -205,11 +206,12 @@ public class OrderController {
                 clientEndPoints.add(clientEndPoint);
             }
         } else {//rest
-            System.out.println("\n Connecting to :" + "ws://127.0.0.1:9080/streaming-api");
+            System.out.println("\n Connecting to :" + "ws://192.168.0.50:9080/streaming-api");
             for (int i = 0; i < 1; i++) {
                 //WebSocketClientEndPoint clientEndPoint = new WebSocketClientEndPoint(new URI("ws://192.168.0.50:9080/streaming-api"));
                // clientEndPoints.add(clientEndPoint);
                 webSocketClientEndPoint = new WebSocketClientEndPoint(new URI("ws://192.168.0.50:9080/streaming-api"));
+                clientEndPoints.add(webSocketClientEndPoint);
               //  setup();
             }
         }
@@ -235,6 +237,8 @@ public class OrderController {
         LoginReqDataBean dataBean = new LoginReqDataBean();
         dataBean.setLgnNme("das_1");
         dataBean.setPwd("123");
+        //dataBean.setLgnNme("IGNL2_UApp_User1");
+       // dataBean.setPwd("a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3");
         RequestBean reqBean = new RequestBean();
         reqBean.setCommonHeader(commonHeader);
         reqBean.setDataBean(dataBean);
@@ -245,8 +249,8 @@ public class OrderController {
         //otherUtils.create_sessions(loginBeanMap);
         webSocketClientEndPoint.sendMessage(loginBeanMap.get(1));
         ResponseBean<LoginResDataBean> responseBean = messageHandler.getResponseDetails(webSocketClientEndPoint, loginBeanMap.get(1).getCommonHeader().getUnqReqId(),1);
-        System.out.println("dfjfsj");
         System.out.println("sessionID :" +responseBean.getCommonHeader().getSesnId());
+        sessionID = responseBean.getCommonHeader().getSesnId();
     }
 }
 
