@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import static com.dfn.oms.newgen.testClientUI.OrderController.orderAction;
+import static com.dfn.oms.newgen.testClientUI.OrderController.sessionID;
 public class WebClientUtils {
 
     public class MultiExchangeReqMeta_InternalTmp {
@@ -230,8 +231,8 @@ public class WebClientUtils {
         OrderRequestBean orderRequestBean = new OrderRequestBean();
         orderRequestBean.getOmsMsgHeader().setRequestType(OMSConst.SERVICE_ID_CREATE_ORDER_NEW);
         orderRequestBean.getOmsMsgHeader().setChannel(orderChannel);
-        orderRequestBean.getOmsMsgHeader().setSessionID("5da15054-99bc-4a39-b628-98f53b098091");
-//        orderRequestBean.getOmsMsgHeader().setLoginID(customerID);
+        orderRequestBean.getOmsMsgHeader().setSessionID(sessionID);
+       orderRequestBean.getOmsMsgHeader().setLoginID(customerID);
         orderRequestBean.getOmsMsgHeader().setUnqReqId(Integer.toString(requestSequence));
         orderRequestBean.setOrder(order);
         order.setTenantCode(OMSConst.DEFAULT_TENANCY_CODE);
@@ -257,7 +258,7 @@ public class WebClientUtils {
             order.setExchange(orderParams.getExchange());
             order.setTradingAccountID((requestSequence % 298) + 1);
             order.setExecBrokerID(execBrokerID);
-            orderRequestBean.getOmsMsgHeader().setLoginID(order.getTradingAccountID()); //for the timebeing tradingAcntID=loginID mapping is exist in DB
+            orderRequestBean.getOmsMsgHeader().setLoginID(1471); //for the timebeing tradingAcntID=loginID mapping is exist in DB
         } else {
             int index = requestSequence % (multiExchangeReqMeta_internalTmps.size());
             multiExchangeReqMeta_internalTmp = multiExchangeReqMeta_internalTmps.get(index);
@@ -267,7 +268,7 @@ public class WebClientUtils {
             order.setExchange(orderParams.getExchange());
             order.setTradingAccountID(multiExchangeReqMeta_internalTmp.tradingAcntID);
             order.setExecBrokerID(multiExchangeReqMeta_internalTmp.execBrokerID);
-            orderRequestBean.getOmsMsgHeader().setLoginID(multiExchangeReqMeta_internalTmp.loginID);
+            orderRequestBean.getOmsMsgHeader().setLoginID(1471);
             System.out.println("======placing exchange:" + order.getExchange());
         }
 
@@ -316,7 +317,7 @@ public class WebClientUtils {
         order.setSymbol(SYMBOL_1010);
         order.setExchange(EXCHANGE_TDWL);
         order.setTradingAccountID(2);
-        orderRequestBean.getOmsMsgHeader().setLoginID(order.getTradingAccountID()); //for the timebeing tradingAcntID=loginID mapping is exist in DB
+        orderRequestBean.getOmsMsgHeader().setLoginID(1471); //for the timebeing tradingAcntID=loginID mapping is exist in DB
         order.setMarketCode(MKT_CODE_ALL);
         order.setExecBrokerID(execBrokerID);
         order.setAction(OMSConst.ORDER_ACTION_CHANGE);
@@ -364,7 +365,7 @@ public class WebClientUtils {
         order.setSymbol(SYMBOL_1010);
         order.setExchange(EXCHANGE_TDWL);
         order.setTradingAccountID(2);
-        orderRequestBean.getOmsMsgHeader().setLoginID(order.getTradingAccountID()); //for the timebeing tradingAcntID=loginID mapping is exist in DB
+        orderRequestBean.getOmsMsgHeader().setLoginID(1471); //for the timebeing tradingAcntID=loginID mapping is exist in DB
         order.setMarketCode(MKT_CODE_ALL);
         order.setExecBrokerID(execBrokerID);
         order.setAction(OMSConst.ORDER_ACTION_CANCEL);

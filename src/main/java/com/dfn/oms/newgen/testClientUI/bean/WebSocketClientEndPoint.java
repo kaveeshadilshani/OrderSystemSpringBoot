@@ -1,6 +1,7 @@
 package com.dfn.oms.newgen.testClientUI.bean;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.websocket.*;
@@ -96,6 +97,15 @@ public class WebSocketClientEndPoint {
 //        OrderController orderController = new OrderController();
         responseList.add(responseCount + message);
         System.out.println("On Message:" + message + " response count:" + responseCount);
+        ResponseBean<LoginResDataBean> responseBean;
+        ObjectMapper map = new ObjectMapper();
+        JSONHandler json = new JSONHandler();
+        try {
+            responseBean = map.readValue(message, new TypeReference<ResponseBean<LoginResDataBean>>(){});
+            commonResponseMap.put(responseBean.getCommonHeader().getUnqReqId(), responseBean);
+        } catch (IOException e) {
+//            e.printStackTrace();
+        }
 
 
         // System.out.println(" response count:" + responseCount);
