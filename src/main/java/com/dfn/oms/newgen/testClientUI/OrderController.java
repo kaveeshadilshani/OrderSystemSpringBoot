@@ -207,18 +207,20 @@ public class OrderController {
             }
         } else {//rest
             System.out.println("\n Connecting to :" + "ws://192.168.0.50:9080/streaming-api");
-            for (int i = 0; i < 1; i++) {
+            webSocketClientEndPoint = new WebSocketClientEndPoint(new URI("ws://192.168.0.50:9080/streaming-api"));
+            clientEndPoints.add(webSocketClientEndPoint);
+            setup();
+            for (int i = 0; i < settings.getNumOfEndPoints()-1; i++) {
                 //WebSocketClientEndPoint clientEndPoint = new WebSocketClientEndPoint(new URI("ws://192.168.0.50:9080/streaming-api"));
                // clientEndPoints.add(clientEndPoint);
                 webSocketClientEndPoint = new WebSocketClientEndPoint(new URI("ws://192.168.0.50:9080/streaming-api"));
                 clientEndPoints.add(webSocketClientEndPoint);
-              //  setup();
             }
         }
         return clientEndPoints;
     }
     @ResponseStatus(value = HttpStatus.OK)
-    @RequestMapping(value = "/setup")
+//    @RequestMapping(value = "/setup")
     public void setup(){
         OtherUtils otherUtils = OtherUtils.getOtherUtils();
 //        webSocketClientEndPoint = WebSocketClientEndPoint.getInstance();

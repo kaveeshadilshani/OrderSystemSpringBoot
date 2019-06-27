@@ -32,12 +32,12 @@ public class UserController1 {
    public static HashMap<String, OrdersPerTimeSlice> hashMap_ordersPerTimeSlice = new HashMap<>();
 
 
-    @GetMapping("/users")
+    @GetMapping("/users/home")
     public List<User> getUsers() {
         return (List<User>) userRepository1.findAll();
     }
 
-    @PostMapping("/users")
+    @PostMapping("/users/home")
     void addUser(@RequestBody User user) {
 //        clientEndPoints.clear();
           userRepository1.save(user);
