@@ -165,8 +165,8 @@ public class OrderController {
         return settings;
     }
     @ResponseStatus(value = HttpStatus.OK)
-    @RequestMapping(value = "/connect")
-    public void connectToEndpoints(){
+    @RequestMapping(value = "/connect/{isGWClient}")
+    public void connectToEndpoints(@PathVariable("isGWClient") boolean isGWClient){
         WebSocketRunner webSocketRunner = new WebSocketRunner();
         String textLocation = (webSocketRunner.TEXT_PATH);
         OrdersPerTimeSlice ordersPerTimeSlice = new OrdersPerTimeSlice();
@@ -180,7 +180,7 @@ public class OrderController {
             settings.setIp(UserController1.userRepository1.findById((long) noOfRequests).get().getIp());
             settings.setPort(UserController1.userRepository1.findById((long) noOfRequests).get().getPort());
 //            settings.setGWClient(hashMap_ordersPerTimeSlice.get(Integer.toString(hashMap_ordersPerTimeSlice.size()-1)).isGWClient());
-            settings.setGWClient(true);
+            settings.setGWClient(isGWClient);
             settings.setNumOfEndPoints(UserController1.userRepository1.findById((long) noOfRequests).get().getEndpoint());
             System.out.println(settings.getIp());
             if(clientEndPoints!= null){
