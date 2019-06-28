@@ -94,7 +94,6 @@ public class WebSocketClientEndPoint {
     @OnMessage
     public void onMessage(String message) {
         responseCount++;
-//        OrderController orderController = new OrderController();
         responseList.add(responseCount + message);
         System.out.println("On Message:" + message + " response count:" + responseCount);
         ResponseBean<LoginResDataBean> responseBean;

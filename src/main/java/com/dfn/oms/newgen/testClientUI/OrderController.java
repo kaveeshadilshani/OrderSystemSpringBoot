@@ -15,8 +15,8 @@ public class OrderController {
     public static List<String> responseList = new ArrayList<String>();
     public static List<Long> timeList = new ArrayList<>();
     public static String orderAction = "2";
-    private static WebSocketRunnerSetting settings;
-    private static List<WebSocketClientEndPoint> clientEndPoints;
+    public static WebSocketRunnerSetting settings;
+    public static List<WebSocketClientEndPoint> clientEndPoints;
     private WebSocketClientEndPoint webSocketClientEndPoint;
     private  WebSocketClientEndPoint.MessageHandler messageHandler;
     public static String sessionID;
