@@ -11,9 +11,9 @@ import java.util.Map;
 @RestController
 public class GatewayLoadController {
 
-
+    int NUMBER_OF_MESSAGE_TYPES = 7;
     boolean threadStatus = true;
-    RequestBean reqBean = new RequestBean();
+    RequestBean [] reqBeanList = new RequestBean[NUMBER_OF_MESSAGE_TYPES] ;
 //    long noOfRequests = UserController1.userRepository1.count();
 
     @PostMapping("/gatewayload")
@@ -22,14 +22,15 @@ public class GatewayLoadController {
 
 
         if(msgType.get(1)){
+            System.out.println("==Login Message==");
             CommonHeader commonHeader ;
             commonHeader = buildCommonHeader(1);
+            reqBeanList[0] = new RequestBean();
             LoginReqDataBean dataBean = new LoginReqDataBean();
             dataBean.setLgnNme("das_1");
             dataBean.setPwd("123");
-            reqBean.setCommonHeader(commonHeader);
-            reqBean.setDataBean(dataBean);
-            System.out.println("==Login Message==");
+            reqBeanList[0].setCommonHeader(commonHeader);
+            reqBeanList[0].setDataBean(dataBean);
         }
         if(msgType.get(2)){
             System.out.println("==Buying Power Message==");
@@ -52,15 +53,18 @@ public class GatewayLoadController {
 
         if(OrderController.settings !=null && UserController1.userRepository1 != null){
             long noOfRequests = UserController1.userRepository1.count();
-            for(int i=0;i<UserController1.userRepository1.findById(noOfRequests).get().getNoOfOrders();i++){
-                if (OrderController.settings.getNumOfEndPoints() > 1) {
-                    OrderController.clientEndPoints.get(i % OrderController.settings.getNumOfEndPoints()).sendMessage(reqBean);
-                } else {
-                    OrderController.clientEndPoints.get(0).sendMessage(reqBean);
+            for(int j=0; j<reqBeanList.length; j++) {
+                if(reqBeanList[j]!=null) {
+                    for (int i = 0; i < UserController1.userRepository1.findById(noOfRequests).get().getNoOfOrders(); i++) {
+                        if (OrderController.settings.getNumOfEndPoints() > 1) {
+                            OrderController.clientEndPoints.get(i % OrderController.settings.getNumOfEndPoints()).sendMessage(reqBeanList[j]);
+                        } else {
+                            OrderController.clientEndPoints.get(0).sendMessage(reqBeanList[j]);
+                        }
+                    }
                 }
             }
         }
-
 
     }
 
