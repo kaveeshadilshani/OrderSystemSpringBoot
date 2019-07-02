@@ -29,8 +29,25 @@ public class GatewayLoadController {
             dataBean.setPwd("123");
             reqBean.setCommonHeader(commonHeader);
             reqBean.setDataBean(dataBean);
-        }else if(msgType.get(2)){
-
+            System.out.println("==Login Message==");
+        }
+        if(msgType.get(2)){
+            System.out.println("==Buying Power Message==");
+        }
+        if(msgType.get(3)){
+            System.out.println("==Account Summary Message==");
+        }
+        if(msgType.get(4)){
+            System.out.println("==Order List Message==");
+        }
+        if(msgType.get(5)){
+            System.out.println("==Order Search Message==");
+        }
+        if(msgType.get(6)){
+            System.out.println("==Customer Search Message==");
+        }
+        if(msgType.get(7)){
+            System.out.println("==Portfolio Details Message==");
         }
 
         if(OrderController.settings !=null && UserController1.userRepository1 != null){
