@@ -1,20 +1,33 @@
 package com.dfn.oms.newgen.testClientUI;
 
-import com.dfn.oms.newgen.testClientUI.bean.CommonHeader;
-import com.dfn.oms.newgen.testClientUI.bean.LoginReqDataBean;
-import com.dfn.oms.newgen.testClientUI.bean.RequestBean;
+import com.dfn.oms.newgen.testClientUI.bean.*;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
 public class GatewayLoadController {
 
-    int NUMBER_OF_MESSAGE_TYPES = 7;
-    boolean threadStatus = true;
-    RequestBean [] reqBeanList = new RequestBean[NUMBER_OF_MESSAGE_TYPES] ;
-//    long noOfRequests = UserController1.userRepository1.count();
+    private int NUMBER_OF_MESSAGE_TYPES = 7;
+    private boolean threadStatus = true;
+    private RequestBean [] reqBeanList = new RequestBean[NUMBER_OF_MESSAGE_TYPES] ;
+    private WebSocketClientEndPoint webSocketClientEndPoint = new WebSocketClientEndPoint();
+    private WebSocketClientEndPoint.MessageHandler messageHandler = new  WebSocketClientEndPoint.MessageHandler();
+    public Map<String, RequestBean<LoginReqDataBean>> reqBeanMap = new HashMap<>() ;
+    public static Map<String, ResponseBean<LoginResDataBean>> responseBeanMap = new HashMap<>();
 
     @PostMapping("/gatewayload")
     @ResponseStatus(value = HttpStatus.OK)
@@ -23,14 +36,38 @@ public class GatewayLoadController {
 
         if(msgType.get(1)){
             System.out.println("==Login Message==");
-            CommonHeader commonHeader ;
-            commonHeader = buildCommonHeader(1);
+
             reqBeanList[0] = new RequestBean();
-            LoginReqDataBean dataBean = new LoginReqDataBean();
-            dataBean.setLgnNme("das_1");
-            dataBean.setPwd("123");
-            reqBeanList[0].setCommonHeader(commonHeader);
-            reqBeanList[0].setDataBean(dataBean);
+
+
+            List<LoginReqDataBean> reqDataBeanList = getReqDataBeans("src/main/resources/Logins.csv");
+
+            try {
+                webSocketClientEndPoint = new WebSocketClientEndPoint(new URI("ws://192.168.0.50:9080/streaming-api"));
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+
+            for(int i=0;i<reqDataBeanList.size();i++){
+                CommonHeader commonHeader = buildCommonHeader(1);
+                RequestBean requestBean = new RequestBean();
+                requestBean.setCommonHeader(commonHeader);
+                requestBean.setDataBean(reqDataBeanList.get(i));
+                webSocketClientEndPoint.sendMessage(requestBean);
+            }
+
+
+//            reqBeanMap =  fetchLoginDetails("src/main/java/com/dfn/oms/newgen/testClientUI/bean/Login.yaml");
+//
+//            try {
+//                webSocketClientEndPoint = new WebSocketClientEndPoint(new URI("ws://192.168.0.50:9080/streaming-api"));
+//            } catch (URISyntaxException e) {
+//                e.printStackTrace();
+//            }
+//            for (Map.Entry<String, RequestBean<LoginReqDataBean>> entry : reqBeanMap.entrySet()){
+//                webSocketClientEndPoint.sendMessage(entry.getValue());
+//            }
+
         }
         if(msgType.get(2)){
             System.out.println("==Buying Power Message==");
@@ -53,7 +90,7 @@ public class GatewayLoadController {
 
         if(OrderController.settings !=null && UserController1.userRepository1 != null){
             long noOfRequests = UserController1.userRepository1.count();
-            for(int j=0; j<reqBeanList.length; j++) {
+            for(int j=1; j<reqBeanList.length; j++) {
                 if(reqBeanList[j]!=null) {
                     for (int i = 0; i < UserController1.userRepository1.findById(noOfRequests).get().getNoOfOrders(); i++) {
                         if (OrderController.settings.getNumOfEndPoints() > 1) {
@@ -79,9 +116,62 @@ public class GatewayLoadController {
         commonHeader.setLoginId(0);
         commonHeader.setChannel(1);
         commonHeader.setClientIp("192.168.16.106");
-        commonHeader.setUnqReqId("0_1538998178633");
+//        commonHeader.setUnqReqId("0_1538998178633");
         commonHeader.setRouteId(0);
+        String requestIdLogin = "CommonClientlogin" + System.nanoTime() + "1";
+
+        commonHeader.setUnqReqId(requestIdLogin);
         return commonHeader;
+    }
+
+    public static void forwardResponseMessage(String unqReqId, ResponseBean responseBean){
+
+        GatewayLoadController.responseBeanMap.put(unqReqId,responseBean);
+        System.out.println("UnqReqID => "+unqReqId+"\n"+responseBean.getCommonHeader().getSesnId());
+    }
+
+    public List<LoginReqDataBean> getReqDataBeans(String path){
+        List<LoginReqDataBean> reqDataBeansList = new ArrayList<>();
+        LoginReqDataBean dataBean ;
+        String line = "";
+        int index;
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(path));
+            while ((line = br.readLine()) != null) {
+                String[] dataBeanString = line.split(",");
+              if(!dataBeanString[2].equals("") && !dataBeanString[3].equals("")){
+                  dataBean = new LoginReqDataBean();
+                  dataBean.setLgnNme(dataBeanString[2].split("\"")[1]);
+                  dataBean.setPwd(dataBeanString[3].split("\"")[1]);
+                  reqDataBeansList.add(dataBean);
+              }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return reqDataBeansList;
+    }
+
+    public Map<String, RequestBean<LoginReqDataBean>> fetchLoginDetails(String path){
+
+        InputStream inputStream;
+        ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
+        List<RequestBean<LoginReqDataBean>> requestBeanlist = null;
+        try {
+            inputStream = new FileInputStream(path);
+            requestBeanlist = yamlMapper.readValue(inputStream, new TypeReference<List<RequestBean<LoginReqDataBean>>>() {
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Map<String, RequestBean<LoginReqDataBean>> loginBeanMap = new HashMap<>();
+        for (RequestBean<LoginReqDataBean> reqBean : requestBeanlist) {
+            loginBeanMap.put(reqBean.getCommonHeader().getUnqReqId(), reqBean);
+        }
+        return loginBeanMap;
     }
 
 }

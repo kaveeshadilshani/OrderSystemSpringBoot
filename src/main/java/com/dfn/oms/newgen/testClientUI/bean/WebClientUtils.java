@@ -232,7 +232,7 @@ public class WebClientUtils {
         orderRequestBean.getOmsMsgHeader().setRequestType(OMSConst.SERVICE_ID_CREATE_ORDER_NEW);
         orderRequestBean.getOmsMsgHeader().setChannel(orderChannel);
         orderRequestBean.getOmsMsgHeader().setSessionID(sessionID);
-       orderRequestBean.getOmsMsgHeader().setLoginID(customerID);
+        orderRequestBean.getOmsMsgHeader().setLoginID(customerID);
         orderRequestBean.getOmsMsgHeader().setUnqReqId(Integer.toString(requestSequence));
         orderRequestBean.setOrder(order);
         order.setTenantCode(OMSConst.DEFAULT_TENANCY_CODE);

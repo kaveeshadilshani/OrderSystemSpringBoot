@@ -1,5 +1,6 @@
 package com.dfn.oms.newgen.testClientUI.bean;
 
+import com.dfn.oms.newgen.testClientUI.GatewayLoadController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -102,6 +103,7 @@ public class WebSocketClientEndPoint {
         try {
             responseBean = map.readValue(message, new TypeReference<ResponseBean<LoginResDataBean>>(){});
             commonResponseMap.put(responseBean.getCommonHeader().getUnqReqId(), responseBean);
+            GatewayLoadController.forwardResponseMessage(responseBean.getCommonHeader().getUnqReqId(),responseBean);
         } catch (IOException e) {
 //            e.printStackTrace();
         }
@@ -166,7 +168,6 @@ public class WebSocketClientEndPoint {
     /**
      * Message handler.
      *
-     * @author Jiji_Sasidharan
      */
     public static class MessageHandler {
 
