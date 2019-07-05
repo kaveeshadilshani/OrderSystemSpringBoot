@@ -59,6 +59,7 @@ public class UserController1 {
     @PostMapping("/users/home/gw")
     void addGwUser(@RequestBody GatewayUser gwUser){
         this.gatewayUser = gwUser;
+
         System.out.println("Successfully Connected..");
     }
 

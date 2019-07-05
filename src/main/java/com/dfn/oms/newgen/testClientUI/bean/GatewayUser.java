@@ -17,11 +17,14 @@ public class GatewayUser {
     private int endpoint;
     private int repeatCount;
     private boolean periodically;
-    private int ordersPerSec;
+    private int requestsPerSec;
+    private int timeConstraintHour;
+    private int timeConstraintMin;
 
     public GatewayUser(){}
 
-    public GatewayUser(long id, String ip,int port, int endpoint,int repeatCount, boolean periodically,int ordersPerSec){
+    public GatewayUser(long id, String ip,int port, int endpoint,int repeatCount, boolean periodically,int requestsPerSec
+            ,int timeConstraintHour, int timeConstraintMin){
 
         this.id = id;
         this.ip = ip;
@@ -29,7 +32,9 @@ public class GatewayUser {
         this.endpoint = endpoint;
         this.repeatCount = repeatCount;
         this.periodically = periodically;
-        this.ordersPerSec = ordersPerSec;
+        this.requestsPerSec = requestsPerSec;
+        this.timeConstraintHour = timeConstraintHour;
+        this.timeConstraintMin = timeConstraintMin;
     }
 
     public long getId() {
@@ -80,12 +85,29 @@ public class GatewayUser {
         this.periodically = periodically;
     }
 
-    public int getOrdersPerSec() {
-        return ordersPerSec;
+    public int getRequestsPerSec() {
+        return requestsPerSec;
     }
 
-    public void setOrdersPerSec(int ordersPerSec) {
-        this.ordersPerSec = ordersPerSec;
+    public void setRequestsPerSec(int requestsPerSec) {
+        this.requestsPerSec = requestsPerSec;
+    }
+
+
+    public int getTimeConstraintHour() {
+        return timeConstraintHour;
+    }
+
+    public void setTimeConstraintHour(int timeConstraintHour) {
+        this.timeConstraintHour = timeConstraintHour;
+    }
+
+    public int getTimeConstraintMin() {
+        return timeConstraintMin;
+    }
+
+    public void setTimeConstraintMin(int timeConstraintMin) {
+        this.timeConstraintMin = timeConstraintMin;
     }
 
 
