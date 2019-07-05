@@ -1,7 +1,7 @@
 package com.dfn.oms.newgen.testClientUI;
 
-import com.dfn.oms.newgen.testClientUI.bean.User;
-import com.dfn.oms.newgen.testClientUI.bean.UserRepository;
+import com.dfn.oms.newgen.testClientUI.bean.CreateOrderComponent.User;
+import com.dfn.oms.newgen.testClientUI.Repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

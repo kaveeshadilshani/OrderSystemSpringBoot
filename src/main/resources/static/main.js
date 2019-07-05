@@ -209,7 +209,7 @@ __webpack_require__.r(__webpack_exports__);
 var OrderServiceService = /** @class */ (function () {
     function OrderServiceService(http) {
         this.http = http;
-        this.usersUrl = '/params';
+        this.usersUrl = '/users/params';
     }
     OrderServiceService.prototype.findAll = function () {
         return this.http.get(this.usersUrl);
@@ -292,7 +292,7 @@ var UserService = /** @class */ (function () {
     function UserService(http, router) {
         this.http = http;
         this.router = router;
-        this.usersUrl = '/users';
+        this.usersUrl = '/users/home';
     }
     UserService.prototype.findAll = function () {
         return this.http.get(this.usersUrl);
@@ -301,7 +301,7 @@ var UserService = /** @class */ (function () {
         return this.http.post(this.usersUrl, user);
     };
     UserService.prototype.gotoUserList = function () {
-        this.router.navigate(['/users']);
+        this.router.navigate(['/users/home']);
     };
     UserService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])(),
@@ -365,7 +365,7 @@ var AmendOrderService = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJhcHAvYW1lbmQvYW1lbmQuY29tcG9uZW50LmNzcyJ9 */"
+module.exports = "#response{\r\n  overflow-y: auto;\r\n}\r\n\r\n#amend-container{\r\n  overflow-x: hidden;\r\n}\r\n\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImFwcC9hbWVuZC9hbWVuZC5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsZ0JBQWdCO0FBQ2xCOztBQUVBO0VBQ0Usa0JBQWtCO0FBQ3BCIiwiZmlsZSI6ImFwcC9hbWVuZC9hbWVuZC5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiI3Jlc3BvbnNle1xyXG4gIG92ZXJmbG93LXk6IGF1dG87XHJcbn1cclxuXHJcbiNhbWVuZC1jb250YWluZXJ7XHJcbiAgb3ZlcmZsb3cteDogaGlkZGVuO1xyXG59XHJcbiJdfQ== */"
 
 /***/ }),
 
@@ -376,7 +376,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!--<app-websocket></app-websocket>-->\n<header class=\"header\">\n  <nav class=\"navbar navbar-expand-lg\">\n    <div class=\"container-fluid d-flex align-items-center justify-content-between\">\n      <div class=\"navbar-header\">\n        <!-- Navbar Header--><a href=\"index.html\" class=\"navbar-brand\">\n        <div class=\"brand-text brand-big visible text-uppercase\"><strong class=\"text-primary\">Order </strong><strong>system</strong></div>\n        <div class=\"brand-text brand-sm\"><strong class=\"text-primary\">D</strong><strong>A</strong></div></a>\n        <!-- Sidebar Toggle Btn-->\n\n\n\n\n\n        <button class=\"sidebar-toggle\"><i class=\"fa fa-long-arrow-left\"></i></button>\n      </div>\n    </div>\n    <!--<div class=\"list-inline-item logout\"> <a *ngIf=\"!loginService.isUserLoggedIn()\" routerLink=\"/login\" class=\"nav-link\"> Login </a> </div>-->\n    <!--<div class=\"list-inline-item logout\"><a *ngIf=\"loginService.isUserLoggedIn()\" routerLink=\"/logout\" class=\"nav-link\">LogOut</a></div>-->\n  </nav>\n</header>\n<div class=\"d-flex align-items-stretch\" >\n  <nav id=\"sidebar\" >\n    <!-- Sidebar Header-->\n\n    <!-- Sidebar Navidation Menus-->\n    <ul class=\"list-unstyled\">\n      <li><a routerLink=\"/users\">Create Orders </a></li>\n      <li><a  routerLink=\"/Amend\"> Amend/Cancel Orders </a></li>\n      <!--<li><a href=\"charts.html\">Cancel Orders </a></li>-->\n      <li><a routerLink=\"/JMS\"> JMS Send</a></li>\n      <!--<li><a href=\"forms.html\"> amendOrder List </a></li>-->\n\n    </ul>\n  </nav>\n  <div class=\"page-content\">\n    <div class=\"page-header\">\n      <div class=\"container-fluid\">\n        <h2 class=\"h5 no-margin-bottom\">Dashboard</h2>\n      </div>\n    </div>\n    <div class=\"row\">\n      <div class=\"col-md-6\">\n        <div class=\"card my-5\">\n          <div class=\"card-body\">\n            <h2>Amend Order</h2><br>\n            <form (ngSubmit)=\"onSubmit()\" #amendOrderForm=\"ngForm\" class=\"form-horizontal\">\n              <div class=\"form-group\">\n                <div class=\"form-group row\">\n                  <label for=\"clOrdID\" class=\"col-sm-3 form-control-label\">ClOrderID</label>\n                  <!--<label for=\"orderChannel\"></label>-->\n                  <div class=\"col-sm-9\">\n                    <input type=\"text\" [(ngModel)]=\"amendOrder && amendOrder.clOrdID\" class=\"form-control\" id=\"clOrdID\"  name =\"clOrdID\"\n                           #clOrdID=\"ngModel\">\n                  </div>\n                </div>\n              </div>\n\n              <div class=\"form-group\">\n                <div class=\"form-group row\">\n                  <label for=\"orderQty\" class=\"col-sm-3 form-control-label\">Order Quantity</label>\n                  <div class=\"col-sm-9\">\n                    <input type=\"number\" [(ngModel)]=\"amendOrder && amendOrder.orderQty\" class=\"form-control\" id=\"orderQty\"  name=\"orderQty\"\n                           required #orderQty=\"ngModel\">\n                  </div>\n                </div>\n              </div>\n\n              <div class=\"form-group\">\n                <div class=\"form-group row\">\n                  <label for=\"price\" class=\"col-sm-3 form-control-label\">Price</label>\n                  <div class=\"col-sm-9\">\n                    <input type=\"text\" [(ngModel)]=\"amendOrder && amendOrder.price\" class=\"form-control\" id=\"price\"  name=\"price\"\n                           required #price=\"ngModel\">\n                  </div>\n                </div>\n              </div>\n              <div class=\"row\">\n                <div class=\"col-md-6\">\n                  <button type=\"submit\" [disabled]=\"!amendOrderForm.form.valid\" (click) =\"order()\" class=\"btn btn-info\">Configure</button>\n                </div>\n                <div class=\"col-md-6\">\n                </div>\n              </div>\n            </form>\n          </div>\n        </div>\n\n\n\n        <div class=\"card my-5\">\n          <div class=\"card-body\">\n            <h2>Cancel Order</h2><br>\n            <form (ngSubmit)=\"onCancel()\" #cancelOrderForm=\"ngForm\" class=\"form-horizontal\">\n              <div class=\"form-group\">\n                <div class=\"form-group row\">\n                  <label for=\"clOrdID\" class=\"col-sm-3 form-control-label\">ClOrderID</label>\n                  <!--<label for=\"orderChannel\"></label>-->\n                  <div class=\"col-sm-9\">\n                    <input type=\"text\" [(ngModel)]=\"cancelOrder && cancelOrder.clOrdID\" class=\"form-control\" id=\"cancelOrder\"  name =\"clOrdID\"\n                           #clOrdID=\"ngModel\">\n                  </div>\n                </div>\n              </div>\n              <div class=\"row\">\n                <div class=\"col-md-6\">\n                  <button type=\"submit\" [disabled]=\"!cancelOrderForm.form.valid\" (click) =\"order()\" class=\"btn btn-info\">Configure</button>\n                </div>\n                <div class=\"col-md-6\">\n                </div>\n              </div>\n            </form>\n          </div>\n        </div>\n\n\n\n\n\n\n      </div>\n      <div class=\"col-md-6\">\n        <br><br>\n        <div class=\"statistic-block block\">\n          <div class=\"progress-details d-flex align-items-end justify-content-between\">\n            <div class=\"title\">\n              <!-- <div class=\"icon\"><i class=\"icon-user-1\"></i></div> -->\n              <strong>Responses</strong>\n            </div>\n          </div>\n\n        </div>\n        <!--<div id=\"scroll\" style=\"overflow-y:scroll; height:400px;\">-->\n        <div id=\"scroll\" style=\"overflow-y:scroll; height:400px;\">\n          <p-table [value]=\"messages\" >\n\n            <ng-template pTemplate=\"header\">\n              <tr>\n                <!--<th>Response</th>-->\n              </tr>\n            </ng-template>\n            <ng-template pTemplate=\"body\" let-message>\n              <tr>\n                <td>{{message}}</td>\n              </tr>\n            </ng-template>\n          </p-table>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n"
+module.exports = "<!--&lt;!&ndash;<app-websocket></app-websocket>&ndash;&gt;-->\r\n<!--<header class=\"header\">-->\r\n  <!--<nav class=\"navbar navbar-expand-lg\" id=\"top-nav\">-->\r\n    <!--<div class=\"container-fluid d-flex align-items-center justify-content-between\">-->\r\n      <!--<div class=\"navbar-header\">-->\r\n        <!--&lt;!&ndash; Navbar Header&ndash;&gt;<a href=\"index.html\" class=\"navbar-brand\">-->\r\n        <!--<div class=\"brand-text brand-big visible text-uppercase\"><strong class=\"text-primary\">Order </strong><strong>system</strong></div>-->\r\n        <!--<div class=\"brand-text brand-sm\"><strong class=\"text-primary\">D</strong><strong>A</strong></div></a>-->\r\n        <!--&lt;!&ndash; Sidebar Toggle Btn&ndash;&gt;-->\r\n\r\n\r\n\r\n\r\n\r\n        <!--<button class=\"sidebar-toggle\"><i class=\"fa fa-long-arrow-left\"></i></button>-->\r\n      <!--</div>-->\r\n    <!--</div>-->\r\n    <!--&lt;!&ndash;<div class=\"list-inline-item logout\"> <a *ngIf=\"!loginService.isUserLoggedIn()\" routerLink=\"/login\" class=\"nav-link\"> Login </a> </div>&ndash;&gt;-->\r\n    <!--&lt;!&ndash;<div class=\"list-inline-item logout\"><a *ngIf=\"loginService.isUserLoggedIn()\" routerLink=\"/logout\" class=\"nav-link\">LogOut</a></div>&ndash;&gt;-->\r\n  <!--</nav>-->\r\n<!--</header>-->\r\n<!--<div class=\"d-flex align-items-stretch main-container\">-->\r\n  <!--<nav id=\"sidebar\" >-->\r\n    <!--&lt;!&ndash; Sidebar Header&ndash;&gt;-->\r\n\r\n    <!--&lt;!&ndash; Sidebar Navidation Menus&ndash;&gt;-->\r\n    <!--<ul class=\"list-unstyled\">-->\r\n      <!--<li><a routerLink=\"/users\">Create Orders </a></li>-->\r\n      <!--<li><a  routerLink=\"/Amend\"> Amend/Cancel Orders </a></li>-->\r\n      <!--&lt;!&ndash;<li><a href=\"charts.html\">Cancel Orders </a></li>&ndash;&gt;-->\r\n      <!--<li><a routerLink=\"/JMS\"> JMS Send</a></li>-->\r\n      <!--&lt;!&ndash;<li><a href=\"forms.html\"> amendOrder List </a></li>&ndash;&gt;-->\r\n\r\n    <!--</ul>-->\r\n  <!--</nav>-->\r\n  <div class=\"page-content\" id=\"amend-container\">\r\n    <div class=\"page-header\">\r\n      <div class=\"container-fluid\">\r\n        <h2 class=\"h5 no-margin-bottom\">Amend/Cancel Orders</h2>\r\n      </div>\r\n    </div>\r\n    <div class=\"row\">\r\n      <div class=\"col-md-6\">\r\n        <div class=\"card my-5\">\r\n          <div class=\"card-body\">\r\n            <h2>Amend Order</h2><br>\r\n            <form (ngSubmit)=\"onSubmit()\" #amendOrderForm=\"ngForm\" class=\"form-horizontal\">\r\n              <div class=\"form-group\">\r\n                <div class=\"form-group row\">\r\n                  <label for=\"clOrdID\" class=\"col-sm-3 form-control-label\">ClOrderID</label>\r\n                  <!--<label for=\"orderChannel\"></label>-->\r\n                  <div class=\"col-sm-9\">\r\n                    <input type=\"text\" [(ngModel)]=\"amendOrder && amendOrder.clOrdID\" class=\"form-control\" id=\"clOrdID\"  name =\"clOrdID\"\r\n                           #clOrdID=\"ngModel\">\r\n                  </div>\r\n                </div>\r\n              </div>\r\n\r\n              <div class=\"form-group\">\r\n                <div class=\"form-group row\">\r\n                  <label for=\"orderQty\" class=\"col-sm-3 form-control-label\">Order Quantity</label>\r\n                  <div class=\"col-sm-9\">\r\n                    <input type=\"number\" [(ngModel)]=\"amendOrder && amendOrder.orderQty\" class=\"form-control\" id=\"orderQty\"  name=\"orderQty\"\r\n                           required #orderQty=\"ngModel\">\r\n                  </div>\r\n                </div>\r\n              </div>\r\n\r\n              <div class=\"form-group\">\r\n                <div class=\"form-group row\">\r\n                  <label for=\"price\" class=\"col-sm-3 form-control-label\">Price</label>\r\n                  <div class=\"col-sm-9\">\r\n                    <input type=\"text\" [(ngModel)]=\"amendOrder && amendOrder.price\" class=\"form-control\" id=\"price\"  name=\"price\"\r\n                           required #price=\"ngModel\">\r\n                  </div>\r\n                </div>\r\n              </div>\r\n              <div class=\"row\">\r\n                <div class=\"col-md-6\">\r\n                  <button type=\"submit\" [disabled]=\"!amendOrderForm.form.valid\" (click) =\"order()\" class=\"btn btn-info\">Configure</button>\r\n                </div>\r\n                <div class=\"col-md-6\">\r\n                </div>\r\n              </div>\r\n            </form>\r\n          </div>\r\n        </div>\r\n\r\n\r\n\r\n        <div class=\"card my-5\">\r\n          <div class=\"card-body\">\r\n            <h2>Cancel Order</h2><br>\r\n            <form (ngSubmit)=\"onCancel()\" #cancelOrderForm=\"ngForm\" class=\"form-horizontal\">\r\n              <div class=\"form-group\">\r\n                <div class=\"form-group row\">\r\n                  <label for=\"clOrdID\" class=\"col-sm-3 form-control-label\">ClOrderID</label>\r\n                  <!--<label for=\"orderChannel\"></label>-->\r\n                  <div class=\"col-sm-9\">\r\n                    <input type=\"text\" [(ngModel)]=\"cancelOrder && cancelOrder.clOrdID\" class=\"form-control\" id=\"cancelOrder\"  name =\"clOrdID\"\r\n                           #clOrdID=\"ngModel\">\r\n                  </div>\r\n                </div>\r\n              </div>\r\n              <div class=\"row\">\r\n                <div class=\"col-md-6\">\r\n                  <button type=\"submit\" [disabled]=\"!cancelOrderForm.form.valid\" (click) =\"order()\" class=\"btn btn-info\">Configure</button>\r\n                </div>\r\n                <div class=\"col-md-6\">\r\n                </div>\r\n              </div>\r\n            </form>\r\n          </div>\r\n        </div>\r\n\r\n\r\n\r\n\r\n\r\n\r\n      </div>\r\n      <div class=\"col-md-6\">\r\n        <br><br>\r\n        <div class=\"statistic-block block\">\r\n          <div class=\"progress-details d-flex align-items-end justify-content-between\">\r\n            <div class=\"title\">\r\n              <!-- <div class=\"icon\"><i class=\"icon-user-1\"></i></div> -->\r\n              <strong>Responses</strong>\r\n            </div>\r\n          </div>\r\n\r\n        </div>\r\n        <!--<div id=\"scroll\" style=\"overflow-y:scroll; height:400px;\">-->\r\n        <div id=\"scroll\" style=\"overflow-y:scroll; height:400px;\">\r\n          <p-table [value]=\"messages\" >\r\n\r\n            <ng-template pTemplate=\"header\">\r\n              <tr>\r\n                <!--<th>Response</th>-->\r\n              </tr>\r\n            </ng-template>\r\n            <ng-template pTemplate=\"body\" let-message>\r\n              <tr>\r\n                <td>{{message}}</td>\r\n              </tr>\r\n            </ng-template>\r\n          </p-table>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n<!--</div>-->\r\n"
 
 /***/ }),
 
@@ -428,7 +428,7 @@ var AmendComponent = /** @class */ (function () {
     AmendComponent.prototype.ngOnInit = function () {
     };
     AmendComponent.prototype.gotoUserList = function () {
-        this.router.navigate(['/Amend']);
+        this.router.navigate(['/users/Amend']);
     };
     AmendComponent.prototype.order = function () {
         var _this = this;
@@ -477,6 +477,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _params_params_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./params/params.component */ "./src/app/params/params.component.ts");
 /* harmony import */ var _jms_jms_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./jms/jms.component */ "./src/app/jms/jms.component.ts");
 /* harmony import */ var _amend_amend_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./amend/amend.component */ "./src/app/amend/amend.component.ts");
+/* harmony import */ var _gateway_load_test_gateway_load_test_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./gateway-load-test/gateway-load-test.component */ "./src/app/gateway-load-test/gateway-load-test.component.ts");
+/* harmony import */ var _layout_layout_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./layout/layout.component */ "./src/app/layout/layout.component.ts");
+
+
 
 
 
@@ -489,15 +493,20 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var routes = [
-    { path: 'users', component: _dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_5__["DashboardComponent"] },
-    { path: 'start', component: _user_form_user_form_component__WEBPACK_IMPORTED_MODULE_3__["UserFormComponent"] },
-    { path: 'login', component: _login_login_component__WEBPACK_IMPORTED_MODULE_4__["LoginComponent"] },
-    { path: 'register', component: _register_register_component__WEBPACK_IMPORTED_MODULE_6__["RegisterComponent"] },
-    { path: '', component: _login_login_component__WEBPACK_IMPORTED_MODULE_4__["LoginComponent"] },
-    { path: 'logout', component: _logout_logout_component__WEBPACK_IMPORTED_MODULE_7__["LogoutComponent"] },
-    { path: 'params', component: _params_params_component__WEBPACK_IMPORTED_MODULE_8__["ParamsComponent"] },
-    { path: 'JMS', component: _jms_jms_component__WEBPACK_IMPORTED_MODULE_9__["JMSComponent"] },
-    { path: 'Amend', component: _amend_amend_component__WEBPACK_IMPORTED_MODULE_10__["AmendComponent"] },
+    {
+        path: 'users', component: _layout_layout_component__WEBPACK_IMPORTED_MODULE_12__["LayoutComponent"],
+        children: [
+            { path: 'home', component: _dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_5__["DashboardComponent"] },
+            { path: 'start', component: _user_form_user_form_component__WEBPACK_IMPORTED_MODULE_3__["UserFormComponent"] },
+            { path: 'login', component: _login_login_component__WEBPACK_IMPORTED_MODULE_4__["LoginComponent"] },
+            { path: 'register', component: _register_register_component__WEBPACK_IMPORTED_MODULE_6__["RegisterComponent"] },
+            { path: 'logout', component: _logout_logout_component__WEBPACK_IMPORTED_MODULE_7__["LogoutComponent"] },
+            { path: 'params', component: _params_params_component__WEBPACK_IMPORTED_MODULE_8__["ParamsComponent"] },
+            { path: 'JMS', component: _jms_jms_component__WEBPACK_IMPORTED_MODULE_9__["JMSComponent"] },
+            { path: 'Amend', component: _amend_amend_component__WEBPACK_IMPORTED_MODULE_10__["AmendComponent"] },
+            { path: 'gateway-load-test', component: _gateway_load_test_gateway_load_test_component__WEBPACK_IMPORTED_MODULE_11__["GatewayLoadTestComponent"] }
+        ]
+    }, { path: '', component: _login_login_component__WEBPACK_IMPORTED_MODULE_4__["LoginComponent"] }
 ];
 var AppRoutingModule = /** @class */ (function () {
     function AppRoutingModule() {
@@ -533,7 +542,7 @@ module.exports = "\r\n\r\n.card bg-dark my-5{\r\n    padding: 0px;\r\n}.card-bod
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<router-outlet></router-outlet>\n"
+module.exports = "<router-outlet></router-outlet>\r\n"
 
 /***/ }),
 
@@ -609,6 +618,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _params_params_component__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./params/params.component */ "./src/app/params/params.component.ts");
 /* harmony import */ var _jms_jms_component__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./jms/jms.component */ "./src/app/jms/jms.component.ts");
 /* harmony import */ var _amend_amend_component__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./amend/amend.component */ "./src/app/amend/amend.component.ts");
+/* harmony import */ var _gateway_load_test_gateway_load_test_component__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./gateway-load-test/gateway-load-test.component */ "./src/app/gateway-load-test/gateway-load-test.component.ts");
+/* harmony import */ var _layout_layout_component__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./layout/layout.component */ "./src/app/layout/layout.component.ts");
+
+
 
 
 
@@ -646,7 +659,9 @@ var AppModule = /** @class */ (function () {
                 _logout_logout_component__WEBPACK_IMPORTED_MODULE_18__["LogoutComponent"],
                 _params_params_component__WEBPACK_IMPORTED_MODULE_19__["ParamsComponent"],
                 _jms_jms_component__WEBPACK_IMPORTED_MODULE_20__["JMSComponent"],
-                _amend_amend_component__WEBPACK_IMPORTED_MODULE_21__["AmendComponent"]
+                _amend_amend_component__WEBPACK_IMPORTED_MODULE_21__["AmendComponent"],
+                _gateway_load_test_gateway_load_test_component__WEBPACK_IMPORTED_MODULE_22__["GatewayLoadTestComponent"],
+                _layout_layout_component__WEBPACK_IMPORTED_MODULE_23__["LayoutComponent"]
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
@@ -680,7 +695,7 @@ var AppModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJhcHAvZGFzaGJvYXJkL2Rhc2hib2FyZC5jb21wb25lbnQuY3NzIn0= */"
+module.exports = "#dashboard-container{\r\n  overflow-x: hidden;\r\n}\r\n\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImFwcC9kYXNoYm9hcmQvZGFzaGJvYXJkLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDRSxrQkFBa0I7QUFDcEIiLCJmaWxlIjoiYXBwL2Rhc2hib2FyZC9kYXNoYm9hcmQuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIiNkYXNoYm9hcmQtY29udGFpbmVye1xyXG4gIG92ZXJmbG93LXg6IGhpZGRlbjtcclxufVxyXG4iXX0= */"
 
 /***/ }),
 
@@ -691,7 +706,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!--<app-websocket></app-websocket>-->\n<header class=\"header\">\n  <nav class=\"navbar navbar-expand-lg\">\n    <div class=\"container-fluid d-flex align-items-center justify-content-between\">\n      <div class=\"navbar-header\">\n        <!-- Navbar Header--><a href=\"index.html\" class=\"navbar-brand\">\n        <div class=\"brand-text brand-big visible text-uppercase\"><strong class=\"text-primary\">Order </strong><strong>system</strong></div>\n        <div class=\"brand-text brand-sm\"><strong class=\"text-primary\">D</strong><strong>A</strong></div></a>\n        <!-- Sidebar Toggle Btn-->\n\n\n\n\n\n        <button class=\"sidebar-toggle\"><i class=\"fa fa-long-arrow-left\"></i></button>\n      </div>\n    </div>\n    <div class=\"list-inline-item logout\"> <a *ngIf=\"!loginService.isUserLoggedIn()\" routerLink=\"/login\" class=\"nav-link\"> Login </a> </div>\n    <div class=\"list-inline-item logout\"><a *ngIf=\"loginService.isUserLoggedIn()\" routerLink=\"/logout\" class=\"nav-link\">LogOut</a></div>\n  </nav>\n</header>\n<div class=\"d-flex align-items-stretch\" >\n  <nav id=\"sidebar\" >\n    <!-- Sidebar Header-->\n\n    <!-- Sidebar Navidation Menus-->\n    <ul class=\"list-unstyled\">\n      <li><a routerLink=\"/users\">Create Orders </a></li>\n      <li><a  routerLink=\"/Amend\"> Amend/Cancel Orders </a></li>\n      <li><a routerLink=\"/JMS\"> JMS Send</a></li>\n    </ul>\n  </nav>\n  <div class=\"page-content\">\n    <div class=\"page-header\">\n      <div class=\"container-fluid\">\n        <h2 class=\"h5 no-margin-bottom\">Dashboard</h2>\n      </div>\n    </div>\n    <div class=\"row\">\n      <div class=\"col-md-6\">\n        <app-user-form></app-user-form>\n        <app-params></app-params>\n      </div>\n      <div class=\"col-md-6\">\n        <div class=\"row\">\n          <div class=\"col-md-12\">\n            <div class=\"card-body\">\n              <app-response></app-response>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n\n"
+module.exports = "\r\n<div class=\"d-flex align-items-stretch\" id=\"dashboard-container\" >\r\n  <div class=\"page-content\">\r\n    <div class=\"page-header\">\r\n      <div class=\"container-fluid\">\r\n        <h2 class=\"h5 no-margin-bottom\">Create Orders</h2>\r\n      </div>\r\n    </div>\r\n    <div class=\"row\">\r\n      <div class=\"col-md-6\">\r\n        <app-user-form></app-user-form>\r\n        <app-params></app-params>\r\n      </div>\r\n      <div class=\"col-md-6\">\r\n        <div class=\"row\">\r\n          <div class=\"col-md-12\">\r\n            <div class=\"card-body\">\r\n              <app-response></app-response>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n\r\n"
 
 /***/ }),
 
@@ -732,6 +747,62 @@ var DashboardComponent = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/gateway-load-test/gateway-load-test.component.css":
+/*!*******************************************************************!*\
+  !*** ./src/app/gateway-load-test/gateway-load-test.component.css ***!
+  \*******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "#gateway-form{\r\n  width: 40%;\r\n  margin-top: 0px !important;\r\n}\r\n\r\n#gateway-core{\r\n  display: flex;\r\n}\r\n\r\n#message-type{\r\n  width: 55%;\r\n}\r\n\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImFwcC9nYXRld2F5LWxvYWQtdGVzdC9nYXRld2F5LWxvYWQtdGVzdC5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsVUFBVTtFQUNWLDBCQUEwQjtBQUM1Qjs7QUFFQTtFQUNFLGFBQWE7QUFDZjs7QUFFQTtFQUNFLFVBQVU7QUFDWiIsImZpbGUiOiJhcHAvZ2F0ZXdheS1sb2FkLXRlc3QvZ2F0ZXdheS1sb2FkLXRlc3QuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIiNnYXRld2F5LWZvcm17XHJcbiAgd2lkdGg6IDQwJTtcclxuICBtYXJnaW4tdG9wOiAwcHggIWltcG9ydGFudDtcclxufVxyXG5cclxuI2dhdGV3YXktY29yZXtcclxuICBkaXNwbGF5OiBmbGV4O1xyXG59XHJcblxyXG4jbWVzc2FnZS10eXBle1xyXG4gIHdpZHRoOiA1NSU7XHJcbn1cclxuIl19 */"
+
+/***/ }),
+
+/***/ "./src/app/gateway-load-test/gateway-load-test.component.html":
+/*!********************************************************************!*\
+  !*** ./src/app/gateway-load-test/gateway-load-test.component.html ***!
+  \********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"page-content\" id=\"gateway-container\">\r\n  <div class=\"page-header\">\r\n    <div class=\"container-fluid\">\r\n      <h2 class=\"h5 no-margin-bottom\">Gateway Load Testing</h2>\r\n    </div>\r\n  </div>\r\n\r\n  <div id=\"gateway-core\">\r\n\r\n    <div class=\"card my-5\" id=\"gateway-form\">\r\n      <div class=\"card-body\">\r\n\r\n        <form (ngSubmit)=\"onSubmit()\" #userForm=\"ngForm\">\r\n          <div class=\"form-group\">\r\n            <label for=\"ip\">IP</label>\r\n            <input type=\"text\" [(ngModel)]=\"user && user.ip\" class=\"form-control\" id=\"ip\"  name =\"ip\" (change)=\"onSubmit()\"\r\n                   #ip=\"ngModel\">\r\n          </div>\r\n\r\n          <div class=\"form-group\">\r\n            <label for=\"port\">Port Number</label>\r\n            <input type=\"number\" [(ngModel)]=\"user && user.port\" class=\"form-control\" id=\"port\" value=8181 name=\"port\" placeholder=\"192.168.0.50\"\r\n                   required (change)=\"onSubmit()\" #port=\"ngModel\">\r\n          </div>\r\n          <div class=\"form-group\">\r\n            <label for=\"endpoint\">No of endpoints</label>\r\n            <input type=\"number\" [(ngModel)]=\"user && user.endpoint\" class=\"form-control\" id=\"endpoint\" name=\"endpoint\" placeholder=\"No of endpoints\" value=1 (change)=\"onSubmit()\"\r\n                   #endpoint=\"ngModel\">\r\n          </div>\r\n          <div class=\"form-group\">\r\n            <label for=\"noOfOrders\">No of Orders</label>\r\n            <input type=\"number\" [(ngModel)]=\"user && user.noOfOrders\" class=\"form-control\" id=\"noOfOrders\" name=\"noOfOrders\" placeholder=\"No of Orders\"\r\n                   required (change)=\"onSubmit()\" #noOfOrders=\"ngModel\">\r\n          </div>\r\n          <div class=\"form-group\">\r\n            <label for=\"orderQty\">OrderQuantity</label>\r\n            <input type=\"number\" [(ngModel)]=\"user && user.orderQty\" class=\"form-control\" id=\"orderQty\" name=\"orderQty\" placeholder=\"OrderParam Quantity\"\r\n                   required (change)=\"onSubmit()\" #noOfOrders=\"ngModel\">\r\n          </div>\r\n\r\n        </form>\r\n      </div>\r\n    </div>\r\n\r\n    <div class=\"card my5\"  id=\"message-type\">\r\n      <div class=\"card-body\">\r\n\r\n        <li>Login</li>\r\n        <li>Buying Power</li>\r\n        <li>Account Summary</li>\r\n        <li>Order List</li>\r\n        <li>Order Search</li>\r\n        <li>Customer Search</li>\r\n        <li>Portfolio Details</li>\r\n\r\n      </div>\r\n    </div>\r\n\r\n\r\n  </div>\r\n\r\n\r\n</div>\r\n"
+
+/***/ }),
+
+/***/ "./src/app/gateway-load-test/gateway-load-test.component.ts":
+/*!******************************************************************!*\
+  !*** ./src/app/gateway-load-test/gateway-load-test.component.ts ***!
+  \******************************************************************/
+/*! exports provided: GatewayLoadTestComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GatewayLoadTestComponent", function() { return GatewayLoadTestComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+
+
+var GatewayLoadTestComponent = /** @class */ (function () {
+    function GatewayLoadTestComponent() {
+    }
+    GatewayLoadTestComponent.prototype.ngOnInit = function () {
+    };
+    GatewayLoadTestComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'app-gateway-load-test',
+            template: __webpack_require__(/*! ./gateway-load-test.component.html */ "./src/app/gateway-load-test/gateway-load-test.component.html"),
+            styles: [__webpack_require__(/*! ./gateway-load-test.component.css */ "./src/app/gateway-load-test/gateway-load-test.component.css")]
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+    ], GatewayLoadTestComponent);
+    return GatewayLoadTestComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/jms/jms.component.css":
 /*!***************************************!*\
   !*** ./src/app/jms/jms.component.css ***!
@@ -739,7 +810,7 @@ var DashboardComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJhcHAvam1zL2ptcy5jb21wb25lbnQuY3NzIn0= */"
+module.exports = "#jms-container{\r\n  overflow-x: hidden;\r\n}\r\n\r\n#jms-core{\r\n  margin-left: 50px;\r\n}\r\n\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImFwcC9qbXMvam1zLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDRSxrQkFBa0I7QUFDcEI7O0FBRUE7RUFDRSxpQkFBaUI7QUFDbkIiLCJmaWxlIjoiYXBwL2ptcy9qbXMuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIiNqbXMtY29udGFpbmVye1xyXG4gIG92ZXJmbG93LXg6IGhpZGRlbjtcclxufVxyXG5cclxuI2ptcy1jb3Jle1xyXG4gIG1hcmdpbi1sZWZ0OiA1MHB4O1xyXG59XHJcbiJdfQ== */"
 
 /***/ }),
 
@@ -750,7 +821,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!--<app-websocket></app-websocket>-->\n<header class=\"header\">\n  <nav class=\"navbar navbar-expand-lg\">\n    <div class=\"container-fluid d-flex align-items-center justify-content-between\">\n      <div class=\"navbar-header\">\n        <!-- Navbar Header--><a href=\"index.html\" class=\"navbar-brand\">\n        <div class=\"brand-text brand-big visible text-uppercase\"><strong class=\"text-primary\">Order </strong><strong>system</strong></div>\n        <div class=\"brand-text brand-sm\"><strong class=\"text-primary\">D</strong><strong>A</strong></div></a>\n        <!-- Sidebar Toggle Btn-->\n        <button class=\"sidebar-toggle\"><i class=\"fa fa-long-arrow-left\"></i></button>\n      </div>\n    </div>\n    <!--<div class=\"list-inline-item logout\"> <a *ngIf=\"!loginService.isUserLoggedIn()\" routerLink=\"/login\" class=\"nav-link\"> Login </a> </div>-->\n    <!--<div class=\"list-inline-item logout\"><a *ngIf=\"loginService.isUserLoggedIn()\" routerLink=\"/logout\" class=\"nav-link\">LogOut</a></div>-->\n  </nav>\n</header>\n<div class=\"d-flex align-items-stretch\" >\n  <nav id=\"sidebar\" >\n    <!-- Sidebar Header-->\n    <!-- Sidebar Navidation Menus-->\n    <ul class=\"list-unstyled\">\n      <li><a  routerLink=\"/users\">Create Orders </a></li>\n      <li><a  routerLink=\"/Amend\"> Amend/Cancel Orders </a></li>\n      <li><a routerLink=\"/JMS\"> JMS Send</a></li>\n      <!--<li><a href=\"forms.html\"> OrderParam List </a></li>-->\n    </ul>\n  </nav>\n  <div class=\"page-content\">\n    <div class=\"page-header\">\n      <div class=\"container-fluid\">\n        <h2 class=\"h5 no-margin-bottom\">Dashboard</h2>\n      </div>\n    </div>\n\n    <input #fileInput type=\"file\" ng2FileSelect [uploader]=\"uploader\"/>\n      <form (ngSubmit)=\"onSubmit()\" #jmsForm=\"ngForm\" class=\"form-horizontal\" >\n        <div> <br>\n        <select id=\"select-type-basic\" [(ngModel)]=\"jms && jms.exchange\" name = \"exchange\" [value]= exchange_values[0] >\n          <option *ngFor=\"let exchange_type of exchange_values\">\n            {{exchange_type}}\n          </option>\n        </select>\n        </div>\n        <div class=\"form-group\">\n        <div class=\"form-group row\">\n          <div class=\"col-sm-9\">\n            <label for=\"jmsMessage\" class=\"col-sm-3 form-control-label\"></label>\n            <input type=\"text\" [(ngModel)]=\"jms && jms.jmsMessage\" class=\"form-control\" name =\"jmsMessage\" id=\"jmsMessage\" #jmsMessage=\"ngModel\">\n          </div>\n        </div>\n        </div>\n        <button type=\"submit\" class=\"btn btn-primary\">Send JMS</button>&nbsp;&nbsp;\n        <button (click)=\"clear()\" class=\"btn btn-secondary\">Clear</button>\n      </form>\n  </div>\n</div>\n\n"
+module.exports = "<!--&lt;!&ndash;<app-websocket></app-websocket>&ndash;&gt;-->\r\n<!--<header class=\"header\">-->\r\n  <!--<nav class=\"navbar navbar-expand-lg\">-->\r\n    <!--<div class=\"container-fluid d-flex align-items-center justify-content-between\">-->\r\n      <!--<div class=\"navbar-header\">-->\r\n        <!--&lt;!&ndash; Navbar Header&ndash;&gt;<a href=\"index.html\" class=\"navbar-brand\">-->\r\n        <!--<div class=\"brand-text brand-big visible text-uppercase\"><strong class=\"text-primary\">Order </strong><strong>system</strong></div>-->\r\n        <!--<div class=\"brand-text brand-sm\"><strong class=\"text-primary\">D</strong><strong>A</strong></div></a>-->\r\n        <!--&lt;!&ndash; Sidebar Toggle Btn&ndash;&gt;-->\r\n        <!--<button class=\"sidebar-toggle\"><i class=\"fa fa-long-arrow-left\"></i></button>-->\r\n      <!--</div>-->\r\n    <!--</div>-->\r\n    <!--&lt;!&ndash;<div class=\"list-inline-item logout\"> <a *ngIf=\"!loginService.isUserLoggedIn()\" routerLink=\"/login\" class=\"nav-link\"> Login </a> </div>&ndash;&gt;-->\r\n    <!--&lt;!&ndash;<div class=\"list-inline-item logout\"><a *ngIf=\"loginService.isUserLoggedIn()\" routerLink=\"/logout\" class=\"nav-link\">LogOut</a></div>&ndash;&gt;-->\r\n  <!--</nav>-->\r\n<!--</header>-->\r\n<!--<div class=\"d-flex align-items-stretch\" >-->\r\n  <!--<nav id=\"sidebar\" >-->\r\n    <!--&lt;!&ndash; Sidebar Header&ndash;&gt;-->\r\n    <!--&lt;!&ndash; Sidebar Navidation Menus&ndash;&gt;-->\r\n    <!--<ul class=\"list-unstyled\">-->\r\n      <!--<li><a  routerLink=\"/users\">Create Orders </a></li>-->\r\n      <!--<li><a  routerLink=\"/Amend\"> Amend/Cancel Orders </a></li>-->\r\n      <!--<li><a routerLink=\"/JMS\"> JMS Send</a></li>-->\r\n      <!--&lt;!&ndash;<li><a href=\"forms.html\"> OrderParam List </a></li>&ndash;&gt;-->\r\n    <!--</ul>-->\r\n  <!--</nav>-->\r\n  <div class=\"page-content\" id=\"jms-container\">\r\n    <div class=\"page-header\">\r\n      <div class=\"container-fluid\">\r\n        <h2 class=\"h5 no-margin-bottom\">JMS Send</h2>\r\n      </div>\r\n    </div>\r\n\r\n    <div id=\"jms-core\">\r\n\r\n      <input #fileInput type=\"file\" ng2FileSelect [uploader]=\"uploader\"/>\r\n      <form (ngSubmit)=\"onSubmit()\" #jmsForm=\"ngForm\" class=\"form-horizontal\" >\r\n        <div> <br>\r\n          <select id=\"select-type-basic\" [(ngModel)]=\"jms && jms.exchange\" name = \"exchange\" [value]= exchange_values[0] >\r\n            <option *ngFor=\"let exchange_type of exchange_values\">\r\n              {{exchange_type}}\r\n            </option>\r\n          </select>\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <div class=\"form-group row\">\r\n            <div class=\"col-sm-9\">\r\n              <label for=\"jmsMessage\" class=\"col-sm-3 form-control-label\"></label>\r\n              <input type=\"text\" [(ngModel)]=\"jms && jms.jmsMessage\" class=\"form-control\" name =\"jmsMessage\" id=\"jmsMessage\" #jmsMessage=\"ngModel\">\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <button type=\"submit\" class=\"btn btn-primary\">Send JMS</button>&nbsp;&nbsp;\r\n        <button (click)=\"clear()\" class=\"btn btn-secondary\">Clear</button>\r\n      </form>\r\n\r\n    </div>\r\n\r\n\r\n  </div>\r\n<!--</div>-->\r\n\r\n"
 
 /***/ }),
 
@@ -798,7 +869,7 @@ var JMSComponent = /** @class */ (function () {
         this.uploader.onCompleteAll = function () { return alert('File uploaded'); };
     };
     JMSComponent.prototype.gotoUserList = function () {
-        this.router.navigate(['/JMS']);
+        this.router.navigate(['/users/JMS']);
     };
     JMSComponent.prototype.clear = function () {
         this.jms.jmsMessage = null;
@@ -858,6 +929,65 @@ var JmsService = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/layout/layout.component.css":
+/*!*********************************************!*\
+  !*** ./src/app/layout/layout.component.css ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "#main-container{\r\n  display: inline-flex;\r\n  width: 100%;\r\n}\r\n\r\n#core-container{\r\n  width: 88%;\r\n}\r\n\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImFwcC9sYXlvdXQvbGF5b3V0LmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDRSxvQkFBb0I7RUFDcEIsV0FBVztBQUNiOztBQUVBO0VBQ0UsVUFBVTtBQUNaIiwiZmlsZSI6ImFwcC9sYXlvdXQvbGF5b3V0LmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyIjbWFpbi1jb250YWluZXJ7XHJcbiAgZGlzcGxheTogaW5saW5lLWZsZXg7XHJcbiAgd2lkdGg6IDEwMCU7XHJcbn1cclxuXHJcbiNjb3JlLWNvbnRhaW5lcntcclxuICB3aWR0aDogODglO1xyXG59XHJcbiJdfQ== */"
+
+/***/ }),
+
+/***/ "./src/app/layout/layout.component.html":
+/*!**********************************************!*\
+  !*** ./src/app/layout/layout.component.html ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<!--<app-websocket></app-websocket>-->\r\n<header class=\"header\">\r\n  <nav class=\"navbar navbar-expand-lg\">\r\n    <div class=\"container-fluid d-flex align-items-center justify-content-between\">\r\n      <div class=\"navbar-header\">\r\n        <!-- Navbar Header--><a href=\"index.html\" class=\"navbar-brand\">\r\n        <div class=\"brand-text brand-big visible text-uppercase\"><strong class=\"text-primary\">Order </strong><strong>system</strong></div>\r\n        <div class=\"brand-text brand-sm\"><strong class=\"text-primary\">D</strong><strong>A</strong></div></a>\r\n        <!-- Sidebar Toggle Btn-->\r\n\r\n\r\n\r\n\r\n\r\n        <button class=\"sidebar-toggle\"><i class=\"fa fa-long-arrow-left\"></i></button>\r\n      </div>\r\n    </div>\r\n    <div class=\"list-inline-item logout\"> <a *ngIf=\"!loginService.isUserLoggedIn()\" routerLink=\"/login\" class=\"nav-link\"> Login </a> </div>\r\n    <div class=\"list-inline-item logout\"><a *ngIf=\"loginService.isUserLoggedIn()\" routerLink=\"\" class=\"nav-link\">LogOut</a></div>\r\n  </nav>\r\n</header>\r\n\r\n<div id=\"main-container\">\r\n\r\n\r\n  <nav id=\"sidebar\" >\r\n    <!-- Sidebar Header-->\r\n\r\n    <!-- Sidebar Navidation Menus-->\r\n    <ul class=\"list-unstyled\">\r\n      <li><a routerLink=\"/users/home\">Create Orders </a></li>\r\n      <li><a  routerLink=\"/users/Amend\"> Amend/Cancel Orders </a></li>\r\n      <li><a routerLink=\"/users/JMS\"> JMS Send</a></li>\r\n      <li><a routerLink=\"/users/gateway-load-test\"> Gateway Load Testing</a></li>\r\n    </ul>\r\n  </nav>\r\n  <div id=\"core-container\">\r\n    <router-outlet></router-outlet>\r\n  </div>\r\n\r\n\r\n\r\n</div>\r\n\r\n"
+
+/***/ }),
+
+/***/ "./src/app/layout/layout.component.ts":
+/*!********************************************!*\
+  !*** ./src/app/layout/layout.component.ts ***!
+  \********************************************/
+/*! exports provided: LayoutComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LayoutComponent", function() { return LayoutComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _services_authentication_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../_services/authentication.service */ "./src/app/_services/authentication.service.ts");
+
+
+
+var LayoutComponent = /** @class */ (function () {
+    function LayoutComponent(loginService) {
+        this.loginService = loginService;
+    }
+    LayoutComponent.prototype.ngOnInit = function () {
+    };
+    LayoutComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'app-layout',
+            template: __webpack_require__(/*! ./layout.component.html */ "./src/app/layout/layout.component.html"),
+            styles: [__webpack_require__(/*! ./layout.component.css */ "./src/app/layout/layout.component.css")]
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_services_authentication_service__WEBPACK_IMPORTED_MODULE_2__["AuthenticationService"]])
+    ], LayoutComponent);
+    return LayoutComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/login/login.component.css":
 /*!*******************************************!*\
   !*** ./src/app/login/login.component.css ***!
@@ -876,7 +1006,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"login-page\">\n  <div class=\"container d-flex align-items-center\">\n    <div class=\"form-holder has-shadow\">\n      <div class=\"row\">\n        <!-- Logo & Information Panel-->\n        <div class=\"col-lg-6\">\n          <div class=\"info d-flex align-items-center\">\n            <div class=\"content\">\n              <div class=\"logo\">\n                <h1>Test Client Order System</h1>\n              </div>\n              <!--<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>-->\n            </div>\n          </div>\n        </div>\n        <!-- Form Panel    -->\n        <div class=\"col-lg-6\">\n          <div class=\"form d-flex align-items-center\">\n            <div class=\"content\">\n              <form method=\"get\" class=\"form-validate mb-4\">\n                <div class=\"form-group\">\n                  <input id=\"login-username\" type=\"text\" name=\"username\" required data-msg=\"Please enter your username\" class=\"input-material\" [(ngModel)]=\"username\"/>\n                  <label for=\"login-username\" class=\"label-material\"></label>\n                </div>\n                <div class=\"form-group\">\n                  <input id=\"login-password\" type=\"password\" name=\"password\" required data-msg=\"Please enter your password\" class=\"input-material\" [(ngModel)]=\"password\">\n                  <label for=\"login-password\" class=\"label-material\"></label>\n                </div>\n                <button type=\"submit\" (click)=checkLogin() class=\"btn btn-primary\">Login</button>\n              </form><a href=\"#\" class=\"forgot-pass\">Forgot Password?</a><br><small>Do not have an account? </small><a href=\"/register\" class=\"signup\">Signup</a>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n\n</div>\n"
+module.exports = "<div class=\"login-page\">\r\n  <div class=\"container d-flex align-items-center\">\r\n    <div class=\"form-holder has-shadow\">\r\n      <div class=\"row\">\r\n        <!-- Logo & Information Panel-->\r\n        <div class=\"col-lg-6\">\r\n          <div class=\"info d-flex align-items-center\">\r\n            <div class=\"content\">\r\n              <div class=\"logo\">\r\n                <h1>Test Client Order System</h1>\r\n              </div>\r\n              <!--<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>-->\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <!-- Form Panel    -->\r\n        <div class=\"col-lg-6\">\r\n          <div class=\"form d-flex align-items-center\">\r\n            <div class=\"content\">\r\n              <form method=\"get\" class=\"form-validate mb-4\">\r\n                <div class=\"form-group\">\r\n                  <input id=\"login-username\" type=\"text\" name=\"username\" required data-msg=\"Please enter your username\" class=\"input-material\" [(ngModel)]=\"username\"/>\r\n                  <label for=\"login-username\" class=\"label-material\"></label>\r\n                </div>\r\n                <div class=\"form-group\">\r\n                  <input id=\"login-password\" type=\"password\" name=\"password\" required data-msg=\"Please enter your password\" class=\"input-material\" [(ngModel)]=\"password\">\r\n                  <label for=\"login-password\" class=\"label-material\"></label>\r\n                </div>\r\n                <button type=\"submit\" (click)=checkLogin() class=\"btn btn-primary\">Login</button>\r\n              </form><a href=\"#\" class=\"forgot-pass\">Forgot Password?</a><br><small>Do not have an account? </small><a href=\"/register\" class=\"signup\">Signup</a>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n\r\n</div>\r\n"
 
 /***/ }),
 
@@ -909,7 +1039,7 @@ var LoginComponent = /** @class */ (function () {
     };
     LoginComponent.prototype.checkLogin = function () {
         if (this.loginservice.authenticate(this.username, this.password)) {
-            this.router.navigate(['/users']);
+            this.router.navigate(['/users/home']);
             this.invalidLogin = false;
         }
         else
@@ -949,7 +1079,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  logout works!\n</p>\n"
+module.exports = "<p>\r\n  logout works!\r\n</p>\r\n"
 
 /***/ }),
 
@@ -1014,7 +1144,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n<div class=\"card my-5\">\n  <div class=\"card-body\">\n    <form (ngSubmit)=\"onSubmit()\" #orderParamForm=\"ngForm\" class=\"form-horizontal\">\n      <div class=\"form-group\">\n        <div class=\"form-group row\">\n          <label for=\"orderChannel\" class=\"col-sm-3 form-control-label\">Order Channel</label>\n          <!--<label for=\"orderChannel\"></label>-->\n          <div class=\"col-sm-9\">\n            <input type=\"text\" [(ngModel)]=\"orderParam && orderParam.orderChannel\" class=\"form-control\" id=\"orderChannel\"  name =\"orderChannel\" (change)=\"onSubmit()\"\n                   #orderChannel=\"ngModel\">\n          </div>\n        </div>\n      </div>\n\n      <div class=\"form-group\">\n        <div class=\"form-group row\">\n        <label for=\"price\" class=\"col-sm-3 form-control-label\">Price</label>\n          <div class=\"col-sm-9\">\n           <input type=\"text\" [(ngModel)]=\"orderParam && orderParam.price\" class=\"form-control\" id=\"price\"  name=\"price\" (change)=\"onSubmit()\"\n               required #stringPrice=\"ngModel\">\n          </div>\n        </div>\n      </div>\n\n      <div class=\"form-group\">\n        <div class=\"form-group row\">\n          <label for=\"type\" class=\"col-sm-3 form-control-label\">Type</label>\n          <div class=\"col-sm-9\">\n            <input type=\"text\" [(ngModel)]=\"orderParam && orderParam.type\" class=\"form-control\" id=\"type\"  name=\"type\" (change)=\"onSubmit()\"\n                   required #type=\"ngModel\">\n          </div>\n        </div>\n      </div>\n\n      <div class=\"form-group\">\n        <div class=\"form-group row\">\n          <label for=\"symbol\" class=\"col-sm-3 form-control-label\">Symbol</label>\n          <div class=\"col-sm-9\">\n            <input type=\"text\" [(ngModel)]=\"orderParam && orderParam.symbol\" class=\"form-control\" id=\"symbol\"  name=\"symbol\" (change)=\"onSubmit()\"\n                   required #symbol=\"ngModel\">\n          </div>\n        </div>\n      </div>\n\n      <div class=\"form-group\">\n        <div class=\"form-group row\">\n          <label for=\"tenantCode\" class=\"col-sm-3 form-control-label\">Tenant Code</label>\n          <div class=\"col-sm-9\">\n            <input type=\"text\" [(ngModel)]=\"orderParam && orderParam.tenantCode\" class=\"form-control\" id=\"tenantCode\"  name=\"tenantCode\" (change)=\"onSubmit()\"\n                   required #tenantCode=\"ngModel\">\n          </div>\n        </div>\n      </div>\n\n      <div class=\"form-group\">\n        <div class=\"form-group row\">\n          <label for=\"marketCode\" class=\"col-sm-3 form-control-label\">Market Code</label>\n          <div class=\"col-sm-9\">\n            <input type=\"text\" [(ngModel)]=\"orderParam && orderParam.marketCode\" class=\"form-control\" id=\"marketCode\"  name=\"marketCode\" (change)=\"onSubmit()\"\n                   required #marketCode=\"ngModel\">\n          </div>\n        </div>\n      </div>\n\n      <div class=\"form-group\">\n        <div class=\"form-group row\">\n          <label for=\"exchange\" class=\"col-sm-3 form-control-label\">Exchange</label>\n          <div class=\"col-sm-9\">\n            <input type=\"text\" [(ngModel)]=\"orderParam && orderParam.exchange\" class=\"form-control\" id=\"exchange\"  name=\"exchange\" (change)=\"onSubmit()\"\n                   required #exchange=\"ngModel\">\n          </div>\n        </div>\n      </div>\n\n      <div class=\"form-group\">\n        <div class=\"form-group row\">\n          <label for=\"side\" class=\"col-sm-3 form-control-label\">Side</label>\n          <div class=\"col-sm-9\">\n            <input type=\"number\" [(ngModel)]=\"orderParam && orderParam.side\" class=\"form-control\" id=\"side\"  name=\"side\" (change)=\"onSubmit()\"\n                   required #side=\"ngModel\">\n          </div>\n        </div>\n      </div>\n\n      <div class=\"form-group\">\n        <div class=\"form-group row\">\n          <label for=\"orderMode\" class=\"col-sm-3 form-control-label\">Order Mode</label>\n          <div class=\"col-sm-9\">\n            <input type=\"number\" [(ngModel)]=\"orderParam && orderParam.orderMode\" class=\"form-control\" id=\"orderMode\"  name=\"orderMode\" (change)=\"onSubmit()\"\n                   required #orderMode=\"ngModel\">\n          </div>\n        </div>\n      </div>\n\n      <div class=\"form-group\">\n        <div class=\"form-group row\">\n          <label for=\"dealerID\" class=\"col-sm-3 form-control-label\">Dealer ID</label>\n          <div class=\"col-sm-9\">\n            <input type=\"text\" [(ngModel)]=\"orderParam && orderParam.dealerID\" class=\"form-control\" id=\"dealerID\"  name=\"dealerID\" (change)=\"onSubmit()\"\n                   required #dealerID=\"ngModel\">\n          </div>\n        </div>\n      </div>\n\n\n\n\n      <div class=\"row\">\n        <div class=\"col-md-6\">\n\n          <button type=\"submit\" [disabled]=\"!orderParamForm.form.valid\" class=\"btn btn-info\">Configure</button>\n        </div>\n        <div class=\"col-md-6\">\n\n\n        </div>\n      </div>\n\n    </form>\n  </div>\n</div>\n"
+module.exports = "\r\n<div class=\"card my-5\">\r\n  <div class=\"card-body\">\r\n    <form (ngSubmit)=\"onSubmit()\" #orderParamForm=\"ngForm\" class=\"form-horizontal\">\r\n      <div class=\"form-group\">\r\n        <div class=\"form-group row\">\r\n          <label for=\"orderChannel\" class=\"col-sm-3 form-control-label\">Order Channel</label>\r\n          <!--<label for=\"orderChannel\"></label>-->\r\n          <div class=\"col-sm-9\">\r\n            <input type=\"text\" [(ngModel)]=\"orderParam && orderParam.orderChannel\" class=\"form-control\" id=\"orderChannel\"  name =\"orderChannel\" (change)=\"onSubmit()\"\r\n                   #orderChannel=\"ngModel\">\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n      <div class=\"form-group\">\r\n        <div class=\"form-group row\">\r\n        <label for=\"price\" class=\"col-sm-3 form-control-label\">Price</label>\r\n          <div class=\"col-sm-9\">\r\n           <input type=\"text\" [(ngModel)]=\"orderParam && orderParam.price\" class=\"form-control\" id=\"price\"  name=\"price\" (change)=\"onSubmit()\"\r\n               required #stringPrice=\"ngModel\">\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n      <div class=\"form-group\">\r\n        <div class=\"form-group row\">\r\n          <label for=\"type\" class=\"col-sm-3 form-control-label\">Type</label>\r\n          <div class=\"col-sm-9\">\r\n            <input type=\"text\" [(ngModel)]=\"orderParam && orderParam.type\" class=\"form-control\" id=\"type\"  name=\"type\" (change)=\"onSubmit()\"\r\n                   required #type=\"ngModel\">\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n      <div class=\"form-group\">\r\n        <div class=\"form-group row\">\r\n          <label for=\"symbol\" class=\"col-sm-3 form-control-label\">Symbol</label>\r\n          <div class=\"col-sm-9\">\r\n            <input type=\"text\" [(ngModel)]=\"orderParam && orderParam.symbol\" class=\"form-control\" id=\"symbol\"  name=\"symbol\" (change)=\"onSubmit()\"\r\n                   required #symbol=\"ngModel\">\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n      <div class=\"form-group\">\r\n        <div class=\"form-group row\">\r\n          <label for=\"tenantCode\" class=\"col-sm-3 form-control-label\">Tenant Code</label>\r\n          <div class=\"col-sm-9\">\r\n            <input type=\"text\" [(ngModel)]=\"orderParam && orderParam.tenantCode\" class=\"form-control\" id=\"tenantCode\"  name=\"tenantCode\" (change)=\"onSubmit()\"\r\n                   required #tenantCode=\"ngModel\">\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n      <div class=\"form-group\">\r\n        <div class=\"form-group row\">\r\n          <label for=\"marketCode\" class=\"col-sm-3 form-control-label\">Market Code</label>\r\n          <div class=\"col-sm-9\">\r\n            <input type=\"text\" [(ngModel)]=\"orderParam && orderParam.marketCode\" class=\"form-control\" id=\"marketCode\"  name=\"marketCode\" (change)=\"onSubmit()\"\r\n                   required #marketCode=\"ngModel\">\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n      <div class=\"form-group\">\r\n        <div class=\"form-group row\">\r\n          <label for=\"exchange\" class=\"col-sm-3 form-control-label\">Exchange</label>\r\n          <div class=\"col-sm-9\">\r\n            <input type=\"text\" [(ngModel)]=\"orderParam && orderParam.exchange\" class=\"form-control\" id=\"exchange\"  name=\"exchange\" (change)=\"onSubmit()\"\r\n                   required #exchange=\"ngModel\">\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n      <div class=\"form-group\">\r\n        <div class=\"form-group row\">\r\n          <label for=\"side\" class=\"col-sm-3 form-control-label\">Side</label>\r\n          <div class=\"col-sm-9\">\r\n            <input type=\"number\" [(ngModel)]=\"orderParam && orderParam.side\" class=\"form-control\" id=\"side\"  name=\"side\" (change)=\"onSubmit()\"\r\n                   required #side=\"ngModel\">\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n      <div class=\"form-group\">\r\n        <div class=\"form-group row\">\r\n          <label for=\"orderMode\" class=\"col-sm-3 form-control-label\">Order Mode</label>\r\n          <div class=\"col-sm-9\">\r\n            <input type=\"number\" [(ngModel)]=\"orderParam && orderParam.orderMode\" class=\"form-control\" id=\"orderMode\"  name=\"orderMode\" (change)=\"onSubmit()\"\r\n                   required #orderMode=\"ngModel\">\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n      <div class=\"form-group\">\r\n        <div class=\"form-group row\">\r\n          <label for=\"dealerID\" class=\"col-sm-3 form-control-label\">Dealer ID</label>\r\n          <div class=\"col-sm-9\">\r\n            <input type=\"text\" [(ngModel)]=\"orderParam && orderParam.dealerID\" class=\"form-control\" id=\"dealerID\"  name=\"dealerID\" (change)=\"onSubmit()\"\r\n                   required #dealerID=\"ngModel\">\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n\r\n\r\n\r\n      <div class=\"row\">\r\n        <div class=\"col-md-6\">\r\n\r\n          <button type=\"submit\" [disabled]=\"!orderParamForm.form.valid\" class=\"btn btn-info\">Configure</button>\r\n        </div>\r\n        <div class=\"col-md-6\">\r\n\r\n\r\n        </div>\r\n      </div>\r\n\r\n    </form>\r\n  </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -1064,7 +1194,7 @@ var ParamsComponent = /** @class */ (function () {
         this.onSubmit();
     };
     ParamsComponent.prototype.gotoUserList = function () {
-        this.router.navigate(['/users']);
+        this.router.navigate(['/users/home']);
     };
     ParamsComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -1099,7 +1229,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  register works!\n</p>\n"
+module.exports = "<p>\r\n  register works!\r\n</p>\r\n"
 
 /***/ }),
 
@@ -1144,7 +1274,7 @@ var RegisterComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "body {\r\n    margin: 0;\r\n    font-size: 28px;\r\n    font-family: Arial, Helvetica, sans-serif;\r\n  }\r\n  \r\n  .header {\r\n    position: fixed;\r\n    top: 0;\r\n    z-index: 1;\r\n    width: 100%;\r\n    background-color: #f1f1f1;\r\n  }\r\n  \r\n  .header h2 {\r\n    text-align: center;\r\n  }\r\n  \r\n  .progress-container {\r\n    width: 100%;\r\n    height: 8px;\r\n    background: #ccc;\r\n    \r\n  }\r\n  \r\n  .progress-bar {\r\n    height: 8px;\r\n    background: #4caf50;\r\n    width: 0%;\r\n  }\r\n  \r\n  .content {\r\n    padding: 100px 0;\r\n    margin: 50px auto 0 auto;\r\n    width: 80%;\r\n  }\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImFwcC9yZXNwb25zZS9yZXNwb25zZS5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0lBQ0ksU0FBUztJQUNULGVBQWU7SUFDZix5Q0FBeUM7RUFDM0M7O0VBRUE7SUFDRSxlQUFlO0lBQ2YsTUFBTTtJQUNOLFVBQVU7SUFDVixXQUFXO0lBQ1gseUJBQXlCO0VBQzNCOztFQUVBO0lBQ0Usa0JBQWtCO0VBQ3BCOztFQUVBO0lBQ0UsV0FBVztJQUNYLFdBQVc7SUFDWCxnQkFBZ0I7O0VBRWxCOztFQUVBO0lBQ0UsV0FBVztJQUNYLG1CQUFtQjtJQUNuQixTQUFTO0VBQ1g7O0VBRUE7SUFDRSxnQkFBZ0I7SUFDaEIsd0JBQXdCO0lBQ3hCLFVBQVU7RUFDWiIsImZpbGUiOiJhcHAvcmVzcG9uc2UvcmVzcG9uc2UuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbImJvZHkge1xyXG4gICAgbWFyZ2luOiAwO1xyXG4gICAgZm9udC1zaXplOiAyOHB4O1xyXG4gICAgZm9udC1mYW1pbHk6IEFyaWFsLCBIZWx2ZXRpY2EsIHNhbnMtc2VyaWY7XHJcbiAgfVxyXG4gIFxyXG4gIC5oZWFkZXIge1xyXG4gICAgcG9zaXRpb246IGZpeGVkO1xyXG4gICAgdG9wOiAwO1xyXG4gICAgei1pbmRleDogMTtcclxuICAgIHdpZHRoOiAxMDAlO1xyXG4gICAgYmFja2dyb3VuZC1jb2xvcjogI2YxZjFmMTtcclxuICB9XHJcbiAgXHJcbiAgLmhlYWRlciBoMiB7XHJcbiAgICB0ZXh0LWFsaWduOiBjZW50ZXI7XHJcbiAgfVxyXG4gIFxyXG4gIC5wcm9ncmVzcy1jb250YWluZXIge1xyXG4gICAgd2lkdGg6IDEwMCU7XHJcbiAgICBoZWlnaHQ6IDhweDtcclxuICAgIGJhY2tncm91bmQ6ICNjY2M7XHJcbiAgICBcclxuICB9XHJcbiAgXHJcbiAgLnByb2dyZXNzLWJhciB7XHJcbiAgICBoZWlnaHQ6IDhweDtcclxuICAgIGJhY2tncm91bmQ6ICM0Y2FmNTA7XHJcbiAgICB3aWR0aDogMCU7XHJcbiAgfVxyXG4gIFxyXG4gIC5jb250ZW50IHtcclxuICAgIHBhZGRpbmc6IDEwMHB4IDA7XHJcbiAgICBtYXJnaW46IDUwcHggYXV0byAwIGF1dG87XHJcbiAgICB3aWR0aDogODAlO1xyXG4gIH0iXX0= */"
+module.exports = "body {\r\n    margin: 0;\r\n    font-size: 28px;\r\n    font-family: Arial, Helvetica, sans-serif;\r\n  }\r\n  \r\n  .header {\r\n    position: fixed;\r\n    top: 0;\r\n    z-index: 1;\r\n    width: 100%;\r\n    background-color: #f1f1f1;\r\n  }\r\n  \r\n  .header h2 {\r\n    text-align: center;\r\n  }\r\n  \r\n  .progress-container {\r\n    width: 100%;\r\n    height: 8px;\r\n    background: #ccc;\r\n    \r\n  }\r\n  \r\n  .progress-bar {\r\n    height: 8px;\r\n    background: #4caf50;\r\n    width: 0%;\r\n  }\r\n  \r\n  .content {\r\n    padding: 100px 0;\r\n    margin: 50px auto 0 auto;\r\n    width: 80%;\r\n  }\r\n  \r\n  #response{\r\n    overflow-y: auto !important;\r\n  }\r\n  \r\n  input[type=checkbox] {\r\n  -webkit-transform: scale(1.5);\r\n          transform: scale(1.5);\r\n}\r\n\r\n\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImFwcC9yZXNwb25zZS9yZXNwb25zZS5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0lBQ0ksU0FBUztJQUNULGVBQWU7SUFDZix5Q0FBeUM7RUFDM0M7O0VBRUE7SUFDRSxlQUFlO0lBQ2YsTUFBTTtJQUNOLFVBQVU7SUFDVixXQUFXO0lBQ1gseUJBQXlCO0VBQzNCOztFQUVBO0lBQ0Usa0JBQWtCO0VBQ3BCOztFQUVBO0lBQ0UsV0FBVztJQUNYLFdBQVc7SUFDWCxnQkFBZ0I7O0VBRWxCOztFQUVBO0lBQ0UsV0FBVztJQUNYLG1CQUFtQjtJQUNuQixTQUFTO0VBQ1g7O0VBRUE7SUFDRSxnQkFBZ0I7SUFDaEIsd0JBQXdCO0lBQ3hCLFVBQVU7RUFDWjs7RUFFQTtJQUNFLDJCQUEyQjtFQUM3Qjs7RUFFRjtFQUNFLDZCQUFxQjtVQUFyQixxQkFBcUI7QUFDdkIiLCJmaWxlIjoiYXBwL3Jlc3BvbnNlL3Jlc3BvbnNlLmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyJib2R5IHtcclxuICAgIG1hcmdpbjogMDtcclxuICAgIGZvbnQtc2l6ZTogMjhweDtcclxuICAgIGZvbnQtZmFtaWx5OiBBcmlhbCwgSGVsdmV0aWNhLCBzYW5zLXNlcmlmO1xyXG4gIH1cclxuICBcclxuICAuaGVhZGVyIHtcclxuICAgIHBvc2l0aW9uOiBmaXhlZDtcclxuICAgIHRvcDogMDtcclxuICAgIHotaW5kZXg6IDE7XHJcbiAgICB3aWR0aDogMTAwJTtcclxuICAgIGJhY2tncm91bmQtY29sb3I6ICNmMWYxZjE7XHJcbiAgfVxyXG4gIFxyXG4gIC5oZWFkZXIgaDIge1xyXG4gICAgdGV4dC1hbGlnbjogY2VudGVyO1xyXG4gIH1cclxuICBcclxuICAucHJvZ3Jlc3MtY29udGFpbmVyIHtcclxuICAgIHdpZHRoOiAxMDAlO1xyXG4gICAgaGVpZ2h0OiA4cHg7XHJcbiAgICBiYWNrZ3JvdW5kOiAjY2NjO1xyXG4gICAgXHJcbiAgfVxyXG4gIFxyXG4gIC5wcm9ncmVzcy1iYXIge1xyXG4gICAgaGVpZ2h0OiA4cHg7XHJcbiAgICBiYWNrZ3JvdW5kOiAjNGNhZjUwO1xyXG4gICAgd2lkdGg6IDAlO1xyXG4gIH1cclxuICBcclxuICAuY29udGVudCB7XHJcbiAgICBwYWRkaW5nOiAxMDBweCAwO1xyXG4gICAgbWFyZ2luOiA1MHB4IGF1dG8gMCBhdXRvO1xyXG4gICAgd2lkdGg6IDgwJTtcclxuICB9XHJcblxyXG4gICNyZXNwb25zZXtcclxuICAgIG92ZXJmbG93LXk6IGF1dG8gIWltcG9ydGFudDtcclxuICB9XHJcblxyXG5pbnB1dFt0eXBlPWNoZWNrYm94XSB7XHJcbiAgdHJhbnNmb3JtOiBzY2FsZSgxLjUpO1xyXG59XHJcblxyXG4iXX0= */"
 
 /***/ }),
 
@@ -1155,7 +1285,7 @@ module.exports = "body {\r\n    margin: 0;\r\n    font-size: 28px;\r\n    font-f
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<br>\n<div class=\"stats-3-block block d-flex\">\n        <div class=\"stats-3\"><strong class=\"d-block\">{{this.totalNoOfOrders}}</strong><span class=\"d-block\">Total Requests</span>\n          <!-- <div class=\"progress progress-template progress-small\">\n            <div role=\"progressbar\" style=\"width: 35%;\" aria-valuenow=\"30\" aria-valuemin=\"0\" aria-valuemax=\"100\" class=\"progress-bar progress-bar-template progress-bar-small dashbg-1\"></div>\n          </div> -->\n        </div>\n        <div class=\"stats-3 d-flex justify-content-between text-center\">\n          <div class=\"item\"><strong class=\"d-block strong-sm\">{{this.responseTime}}</strong><span class=\"d-block span-sm\">Time(s)</span>\n            <!-- <div class=\"line\"></div><small>+246</small> -->\n          </div>\n          <div class=\"item\"><strong class=\"d-block strong-sm\">{{this.totalNoOfOrders-this.responseCount}}</strong><span class=\"d-block span-sm\">Pending</span>\n            <!-- <div class=\"line\"></div><small>+416</small> -->\n          </div>\n        </div>\n      </div>\n\n<div class=\"statistic-block block\">\n    <div class=\"progress-details d-flex align-items-end justify-content-between\">\n      <div class=\"title\">\n        <!-- <div class=\"icon\"><i class=\"icon-user-1\"></i></div> -->\n        <strong>Responses</strong>\n      </div>\n      <div class=\"number dashtext-1\">{{this.responseCount}}</div>\n    </div>\n    <div class=\"progress progress-template\">\n        <div role=\"progressbar\" [style.width]=\"this.percentage + '%'\" aria-valuenow=\"55\" aria-valuemin=\"0\" aria-valuemax=\"100\" class=\"progress-bar progress-bar-template dashbg-3\"></div>\n    </div>\n  </div>\n<button type=\"submit\" value=\"Click\" class=\"btn btn-info\" (click) =\"connect()\">Reconnect</button>&nbsp;&nbsp;\n<button type=\"submit\" value=\"Click\" class=\"btn btn-info\" (click) =\"order()\">Place Order</button>&nbsp;&nbsp;\n<button type=\"submit\" value=\"Click\" class=\"btn btn-info\" (click) =\"clear()\">Clear</button>\n<div><br></div>\n\n<div id=\"scroll\" style=\"overflow-y:scroll; height:400px;\">\n<p-table [value]=\"messages\" >\n\n    <ng-template pTemplate=\"header\">\n      <tr>\n        <th>Response</th>\n      </tr>\n    </ng-template>\n    <ng-template pTemplate=\"body\" let-message>\n      <tr>\n        <td>{{message}}</td>\n      </tr>\n    </ng-template>\n\n  </p-table>\n</div>\n"
+module.exports = "<br>\r\n<div class=\"stats-3-block block d-flex\">\r\n        <div class=\"stats-3\"><strong class=\"d-block\">{{this.totalNoOfOrders}}</strong><span class=\"d-block\">Total Requests</span>\r\n        </div>\r\n        <div class=\"stats-3 d-flex justify-content-between text-center\">\r\n          <div class=\"item\"><strong class=\"d-block strong-sm\">{{this.responseTime}}</strong><span class=\"d-block span-sm\">Time(s)</span>\r\n            <!-- <div class=\"line\"></div><small>+246</small> -->\r\n          </div>\r\n          <div class=\"item\"><strong class=\"d-block strong-sm\">{{this.totalNoOfOrders-this.responseCount}}</strong><span class=\"d-block span-sm\">Pending</span>\r\n            <!-- <div class=\"line\"></div><small>+416</small> -->\r\n          </div>\r\n        </div>\r\n      </div>\r\n\r\n<div class=\"statistic-block block\">\r\n    <div class=\"progress-details d-flex align-items-end justify-content-between\">\r\n      <div class=\"title\">\r\n        <!-- <div class=\"icon\"><i class=\"icon-user-1\"></i></div> -->\r\n        <strong>Responses</strong>\r\n      </div>\r\n      <div class=\"number dashtext-1\">{{this.responseCount}}</div>\r\n    </div>\r\n    <div class=\"progress progress-template\">\r\n        <div role=\"progressbar\" [style.width]=\"this.percentage + '%'\" aria-valuenow=\"55\" aria-valuemin=\"0\" aria-valuemax=\"100\" class=\"progress-bar progress-bar-template dashbg-3\"></div>\r\n    </div>\r\n  </div>\r\n<button type=\"submit\" value=\"Click\" class=\"btn btn-info\" (click) =\"connect()\">Reconnect</button>&nbsp;&nbsp;\r\n<!--<button type=\"submit\" value=\"Click\" class=\"btn btn-info\" (click) =\"order()\">Place Order</button>&nbsp;&nbsp;-->\r\n<button type=\"submit\" value=\"Click\" class=\"btn btn-info\" (click) =\"clear()\">Clear</button>&nbsp;&nbsp;\r\n<button type=\"submit\" value=\"Click\" class=\"btn btn-info\" (click) =\"stop()\">Stop</button>&nbsp;&nbsp;\r\n<div><br></div>\r\n\r\n<!--GWClient<input type=\"checkbox\" [(ngModel)]=\"theCheckbox\"  data-md-icheck (change)=\"toggleVisibility($event)\"/>&nbsp;&nbsp;-->\r\n<div class=\"btn-group mr-3\">\r\n  <button type=\"button\" class=\"btn btn-success\" (click) =sendConventionalOrders()>Place Orders</button>\r\n  <div class=\"btn-group\" ngbDropdown role=\"group\" aria-label=\"Button group with nested dropdown\">\r\n    <button class=\"btn btn-primary\" ngbDropdownToggle (click)=\"sendTimedOrders()\">Timed Orders</button>\r\n    <div class=\"dropdown-menu\" ngbDropdownMenu>\r\n      <button ngbDropdownItem>One</button>\r\n      <button ngbDropdownItem>Two</button>\r\n      <button ngbDropdownItem>Four!</button>\r\n    </div>\r\n  </div>\r\n</div>\r\n\r\n\r\n\r\n<div id=\"response\" style=\"overflow-y:scroll; height:400px;\">\r\n<p-table [value]=\"messages\" >\r\n\r\n    <ng-template pTemplate=\"header\">\r\n      <tr>\r\n        <th>Response</th>\r\n      </tr>\r\n    </ng-template>\r\n    <ng-template pTemplate=\"body\" let-message>\r\n      <tr>\r\n        <td>{{message}}</td>\r\n      </tr>\r\n    </ng-template>\r\n\r\n  </p-table>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -1187,6 +1317,7 @@ var ResponseComponent = /** @class */ (function () {
     function ResponseComponent(responseService, userService) {
         this.responseService = responseService;
         this.userService = userService;
+        this.exchange_values = ["FromExchange", "ToExchange"];
         this.messages = [];
         this.responseCountArray = [];
         this.columnDefs = [
@@ -1232,6 +1363,8 @@ var ResponseComponent = /** @class */ (function () {
             if (_this.responseCount == 0) {
                 _this.responseTime = 0;
             }
+            console.log(_this.responseCount);
+            console.log(data);
             _this.responseTime = data[_this.responseCount - 1] / 1000;
         });
     };
@@ -1242,7 +1375,6 @@ var ResponseComponent = /** @class */ (function () {
         this.responseTime = 0;
         this.userService.findAll().subscribe(function (data) {
             _this.users = data;
-            _this.totalNoOfOrders = _this.users[_this.users.length - 1].noOfOrders;
         });
         this.responseService.order().subscribe(function (params) {
             // this.populateRowData();
@@ -1261,6 +1393,12 @@ var ResponseComponent = /** @class */ (function () {
                 // this.subscription1.unsubscribe();
                 // this.subscription2.unsubscribe();
                 // this.subscription3.unsubscribe();
+            }
+            if (_this.responseCount <= _this.users[_this.users.length - 1].noOfOrders) {
+                _this.totalNoOfOrders = _this.users[_this.users.length - 1].noOfOrders;
+            }
+            else {
+                _this.totalNoOfOrders = _this.responseCount;
             }
         });
         this.subscription2 = Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["timer"])(0, 1000).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["switchMap"])(function () { return _this.responseService.getLastHundredResponses(); })).subscribe(function (data) {
@@ -1282,6 +1420,24 @@ var ResponseComponent = /** @class */ (function () {
     };
     ResponseComponent.prototype.connect = function () {
         this.responseService.connect().subscribe();
+    };
+    ResponseComponent.prototype.stop = function () {
+        this.responseService.stop().subscribe();
+        this.subscription1.unsubscribe();
+        this.subscription2.unsubscribe();
+        this.subscription3.unsubscribe();
+        // this.responseCount =0;
+        // this.responseTime =0;
+        this.totalNoOfOrders = this.responseCount;
+    };
+    ResponseComponent.prototype.sendTimedOrders = function () {
+        this.responseService.sendTimedOrders().subscribe();
+        //this.responseService.order().subscribe();
+        this.order();
+    };
+    ResponseComponent.prototype.sendConventionalOrders = function () {
+        this.responseService.sendConventionalOrders().subscribe();
+        this.order();
     };
     ResponseComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -1319,22 +1475,32 @@ __webpack_require__.r(__webpack_exports__);
 var ResponseService = /** @class */ (function () {
     function ResponseService(http) {
         this.http = http;
+        this.urlPrefix = '';
         var source = Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["interval"])(1000);
     }
     ResponseService.prototype.getReponseCount = function () {
-        return this.http.get('/ResponseCount');
+        return this.http.get(this.urlPrefix + '/ResponseCount');
     };
     ResponseService.prototype.getReponseTime = function () {
-        return this.http.get('/ResponseTime');
+        return this.http.get(this.urlPrefix + '/ResponseTime');
     };
     ResponseService.prototype.order = function () {
-        return this.http.get('/startOrder');
+        return this.http.get(this.urlPrefix + '/startOrder');
     };
     ResponseService.prototype.getLastHundredResponses = function () {
-        return this.http.get('/ResponseData');
+        return this.http.get(this.urlPrefix + '/ResponseData');
     };
     ResponseService.prototype.connect = function () {
-        return this.http.get('/connect');
+        return this.http.get(this.urlPrefix + '/connect');
+    };
+    ResponseService.prototype.stop = function () {
+        return this.http.get(this.urlPrefix + '/stop');
+    };
+    ResponseService.prototype.sendTimedOrders = function () {
+        return this.http.get(this.urlPrefix + '/sendTimedOrders');
+    };
+    ResponseService.prototype.sendConventionalOrders = function () {
+        return this.http.get(this.urlPrefix + '/sendConventionalOrders');
     };
     ResponseService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
@@ -1367,7 +1533,7 @@ module.exports = "form{\r\n    padding-top: 0px;\r\n   \r\n    \r\n}\r\n.card bg
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n<div class=\"container\">\n  <div class=\"row\">\n    <div class=\"col-sm-6\">\n      <input #fileInput type=\"file\" ng2FileSelect [uploader]=\"uploader\"/>\n    </div>\n    <div class=\"col-sm-6\">\n      <div class=\"statistic-block block\"  [style.height]=\"'60px'\" [style.margin]=\" '0px' \">\n      <form>\n        <input type=\"number\" [style.width]=\"'60px'\" [style.background-color]=\"'blue'\" [(ngModel)]=\"ordersPerTimeSlice && ordersPerTimeSlice.orderPerSlice\"  id=\"orderPerSlice\"  name =\"orderPerSlice\" (change)=\"onSubmitOrdersPerTimeSlice()\"\n               #orderPerSlice=\"ngModel\" >\n        :\n        <input type=\"number\" [style.width]=\"'40px'\" [style.background-color]=\"'blue'\" [(ngModel)]=\"ordersPerTimeSlice && ordersPerTimeSlice.timePeriod\"  id=\"timePeriod\"  name =\"timePeriod\" (change)=\"onSubmitOrdersPerTimeSlice()\"\n               #timePeriod=\"ngModel\" > &nbsp;\n        <!--GWClient<input type=\"checkbox\" [style.heigt]=\"'60px'\"[(ngModel)]=\"ordersPerTimeSlice && ordersPerTimeSlice.GWClient\"  name =\"GWClient\" (change)=\"onSubmitOrdersPerTimeSlice()\"  #GWClient=\"ngModel\">-->\n      </form>\n      </div>\n    </div>\n  </div>\n</div>\n <div class=\"card my-5\">\n  <div class=\"card-body\">\n\n    <form (ngSubmit)=\"onSubmit()\" #userForm=\"ngForm\">\n      <div class=\"form-group\">\n        <label for=\"ip\">IP</label>\n        <input type=\"text\" [(ngModel)]=\"user && user.ip\" class=\"form-control\" id=\"ip\"  name =\"ip\" (change)=\"onSubmit()\"\n           #ip=\"ngModel\">\n      </div>\n      \n      <div class=\"form-group\">\n        <label for=\"port\">Port Number</label>\n        <input type=\"number\" [(ngModel)]=\"user && user.port\" class=\"form-control\" id=\"port\" value=8181 name=\"port\" placeholder=\"192.168.0.50\"\n          required (change)=\"onSubmit()\" #port=\"ngModel\">\n     </div>\n      <div class=\"form-group\">\n        <label for=\"endpoint\">No of endpoints</label>\n        <input type=\"number\" [(ngModel)]=\"user && user.endpoint\" class=\"form-control\" id=\"endpoint\" name=\"endpoint\" placeholder=\"No of endpoints\" value=1 (change)=\"onSubmit()\"\n           #endpoint=\"ngModel\">\n       </div>\n      <div class=\"form-group\">\n        <label for=\"noOfOrders\">No of Orders</label>\n        <input type=\"number\" [(ngModel)]=\"user && user.noOfOrders\" class=\"form-control\" id=\"noOfOrders\" name=\"noOfOrders\" placeholder=\"No of Orders\"\n          required (change)=\"onSubmit()\" #noOfOrders=\"ngModel\">\n      </div>\n      <div class=\"form-group\">\n        <label for=\"orderQty\">OrderQuantity</label>\n        <input type=\"number\" [(ngModel)]=\"user && user.orderQty\" class=\"form-control\" id=\"orderQty\" name=\"orderQty\" placeholder=\"OrderParam Quantity\"\n          required (change)=\"onSubmit()\" #noOfOrders=\"ngModel\">\n      </div>\n    \n    </form>\n  </div>\n</div>\n"
+module.exports = "\r\n<div class=\"container\">\r\n  <div class=\"row\">\r\n    <div class=\"col-sm-6\">\r\n      <input #fileInput type=\"file\" ng2FileSelect [uploader]=\"uploader\"/>\r\n    </div>\r\n    <div class=\"col-sm-6\">\r\n      <div class=\"statistic-block block\"  [style.height]=\"'60px'\" [style.margin]=\" '0px' \">\r\n      <form>\r\n        <input type=\"number\" [style.width]=\"'60px'\" [style.background-color]=\"'blue'\" [(ngModel)]=\"ordersPerTimeSlice && ordersPerTimeSlice.orderPerSlice\"  id=\"orderPerSlice\"  name =\"orderPerSlice\" (change)=\"onSubmitOrdersPerTimeSlice()\"\r\n               #orderPerSlice=\"ngModel\" >\r\n        :\r\n        <input type=\"number\" [style.width]=\"'40px'\" [style.background-color]=\"'blue'\" [(ngModel)]=\"ordersPerTimeSlice && ordersPerTimeSlice.timePeriod\"  id=\"timePeriod\"  name =\"timePeriod\" (change)=\"onSubmitOrdersPerTimeSlice()\"\r\n               #timePeriod=\"ngModel\" > &nbsp;\r\n        <!--GWClient<input type=\"checkbox\" [style.heigt]=\"'60px'\"[(ngModel)]=\"ordersPerTimeSlice && ordersPerTimeSlice.GWClient\"  name =\"GWClient\" (change)=\"onSubmitOrdersPerTimeSlice()\"  #GWClient=\"ngModel\">-->\r\n      </form>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n <div class=\"card my-5\">\r\n  <div class=\"card-body\">\r\n\r\n    <form (ngSubmit)=\"onSubmit()\" #userForm=\"ngForm\">\r\n      <div class=\"form-group\">\r\n        <label for=\"ip\">IP</label>\r\n        <input type=\"text\" [(ngModel)]=\"user && user.ip\" class=\"form-control\" id=\"ip\"  name =\"ip\" (change)=\"onSubmit()\"\r\n           #ip=\"ngModel\">\r\n      </div>\r\n      \r\n      <div class=\"form-group\">\r\n        <label for=\"port\">Port Number</label>\r\n        <input type=\"number\" [(ngModel)]=\"user && user.port\" class=\"form-control\" id=\"port\" value=8181 name=\"port\" placeholder=\"192.168.0.50\"\r\n          required (change)=\"onSubmit()\" #port=\"ngModel\">\r\n     </div>\r\n      <div class=\"form-group\">\r\n        <label for=\"endpoint\">No of endpoints</label>\r\n        <input type=\"number\" [(ngModel)]=\"user && user.endpoint\" class=\"form-control\" id=\"endpoint\" name=\"endpoint\" placeholder=\"No of endpoints\" value=1 (change)=\"onSubmit()\"\r\n           #endpoint=\"ngModel\">\r\n       </div>\r\n      <div class=\"form-group\">\r\n        <label for=\"noOfOrders\">No of Orders</label>\r\n        <input type=\"number\" [(ngModel)]=\"user && user.noOfOrders\" class=\"form-control\" id=\"noOfOrders\" name=\"noOfOrders\" placeholder=\"No of Orders\"\r\n          required (change)=\"onSubmit()\" #noOfOrders=\"ngModel\">\r\n      </div>\r\n      <div class=\"form-group\">\r\n        <label for=\"orderQty\">OrderQuantity</label>\r\n        <input type=\"number\" [(ngModel)]=\"user && user.orderQty\" class=\"form-control\" id=\"orderQty\" name=\"orderQty\" placeholder=\"OrderParam Quantity\"\r\n          required (change)=\"onSubmit()\" #noOfOrders=\"ngModel\">\r\n      </div>\r\n    \r\n    </form>\r\n  </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -1435,16 +1601,17 @@ var UserFormComponent = /** @class */ (function () {
             _this.user.endpoint = _this.users[_this.users.length - 1].endpoint;
             _this.user.orderQty = _this.users[_this.users.length - 1].orderQty;
             _this.ordersPerTimeSlice.timePeriod = 1;
-            _this.ordersPerTimeSlice.orderPerSlice = 700;
+            _this.ordersPerTimeSlice.orderPerSlice = 500;
         });
     }
     UserFormComponent.prototype.ngOnInit = function () {
         var headers = [{ name: 'Accept', value: 'application/json' }];
         this.uploader = new ng2_file_upload__WEBPACK_IMPORTED_MODULE_7__["FileUploader"]({ url: '/api/files', autoUpload: true, headers: headers });
         this.uploader.onCompleteAll = function () { return alert('File uploaded'); };
+        this.responseService.connect().subscribe();
     };
     UserFormComponent.prototype.gotoUserList = function () {
-        this.router.navigate(['/users']);
+        this.router.navigate(['/users/home']);
     };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('fileInput'),
@@ -1528,7 +1695,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_1__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\kaveeshad\Documents\springbootAngular\ang-app\src\main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! C:\Users\kaveeshad\Documents\springbootAngular\FrontEnd\OrderSystemAngular\src\main.ts */"./src/main.ts");
 
 
 /***/ })
