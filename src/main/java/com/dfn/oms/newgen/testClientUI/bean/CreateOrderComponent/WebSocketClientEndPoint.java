@@ -1,10 +1,9 @@
 package com.dfn.oms.newgen.testClientUI.bean.CreateOrderComponent;
 
-import com.dfn.oms.newgen.testClientUI.bean.GatewayClient.LoginResDataBean;
+import com.dfn.oms.newgen.testClientUI.GatewayLoadController;import com.dfn.oms.newgen.testClientUI.bean.GatewayClient.LoginResDataBean;
 import com.dfn.oms.newgen.testClientUI.bean.GatewayClient.RequestBean;
 import com.dfn.oms.newgen.testClientUI.bean.GatewayClient.ResponseBean;
-import com.dfn.oms.newgen.testClientUI.bean.JSON.JSONHandler;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.dfn.oms.newgen.testClientUI.bean.JSON.JSONHandler;import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -98,7 +97,6 @@ public class WebSocketClientEndPoint {
     @OnMessage
     public void onMessage(String message) {
         responseCount++;
-//        OrderController orderController = new OrderController();
         responseList.add(responseCount + message);
         System.out.println("On Message:" + message + " response count:" + responseCount);
         ResponseBean<LoginResDataBean> responseBean;
@@ -107,6 +105,7 @@ public class WebSocketClientEndPoint {
         try {
             responseBean = map.readValue(message, new TypeReference<ResponseBean<LoginResDataBean>>(){});
             commonResponseMap.put(responseBean.getCommonHeader().getUnqReqId(), responseBean);
+            GatewayLoadController.forwardResponseMessage(responseBean.getCommonHeader().getUnqReqId(),responseBean);
         } catch (IOException e) {
 //            e.printStackTrace();
         }
@@ -171,7 +170,6 @@ public class WebSocketClientEndPoint {
     /**
      * Message handler.
      *
-     * @author Jiji_Sasidharan
      */
     public static class MessageHandler {
 

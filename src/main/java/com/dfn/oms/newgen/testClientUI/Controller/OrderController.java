@@ -20,8 +20,8 @@ public class OrderController {
     public static List<String> responseList = new ArrayList<String>();
     public static List<Long> timeList = new ArrayList<>();
     public static String orderAction = "2";
-    private static WebSocketRunnerSetting settings;
-    private static List<WebSocketClientEndPoint> clientEndPoints;
+    public static WebSocketRunnerSetting settings;
+    public static List<WebSocketClientEndPoint> clientEndPoints;
     private WebSocketClientEndPoint webSocketClientEndPoint;
     private  WebSocketClientEndPoint.MessageHandler messageHandler;
     public static String sessionID;
@@ -170,8 +170,8 @@ public class OrderController {
         return settings;
     }
     @ResponseStatus(value = HttpStatus.OK)
-    @RequestMapping(value = "/connect")
-    public void connectToEndpoints(){
+    @RequestMapping(value = "/connect/{isGWClient}")
+    public void connectToEndpoints(@PathVariable("isGWClient") boolean isGWClient){
         WebSocketRunner webSocketRunner = new WebSocketRunner();
         String textLocation = (webSocketRunner.TEXT_PATH);
         OrdersPerTimeSlice ordersPerTimeSlice = new OrdersPerTimeSlice();
@@ -185,9 +185,8 @@ public class OrderController {
             settings.setIp(UserController.userRepository.findById((long) noOfRequests).get().getIp());
             settings.setPort(UserController.userRepository.findById((long) noOfRequests).get().getPort());
 //            settings.setGWClient(hashMap_ordersPerTimeSlice.get(Integer.toString(hashMap_ordersPerTimeSlice.size()-1)).isGWClient());
-            settings.setGWClient(false);
-            settings.setNumOfEndPoints(UserController.userRepository.findById((long) noOfRequests).get().getEndpoint());
-            System.out.println(settings.getIp());
+            settings.setGWClient(isGWClient);
+            settings.setNumOfEndPoints(UserController1.userRepository1.findById((long) noOfRequests).get().getEndpoint());            System.out.println(settings.getIp());
             if(clientEndPoints!= null){
                 clientEndPoints.clear();
             }
@@ -212,18 +211,20 @@ public class OrderController {
             }
         } else {//rest
             System.out.println("\n Connecting to :" + "ws://192.168.0.50:9080/streaming-api");
-            for (int i = 0; i < 1; i++) {
+            webSocketClientEndPoint = new WebSocketClientEndPoint(new URI("ws://192.168.0.50:9080/streaming-api"));
+            clientEndPoints.add(webSocketClientEndPoint);
+            setup();
+            for (int i = 0; i < settings.getNumOfEndPoints()-1; i++) {
                 //WebSocketClientEndPoint clientEndPoint = new WebSocketClientEndPoint(new URI("ws://192.168.0.50:9080/streaming-api"));
                 // clientEndPoints.add(clientEndPoint);
                 webSocketClientEndPoint = new WebSocketClientEndPoint(new URI("ws://192.168.0.50:9080/streaming-api"));
                 clientEndPoints.add(webSocketClientEndPoint);
-                //  setup();
             }
         }
         return clientEndPoints;
     }
     @ResponseStatus(value = HttpStatus.OK)
-    @RequestMapping(value = "/setup")
+//    @RequestMapping(value = "/setup")
     public void setup(){
         OtherUtils otherUtils = OtherUtils.getOtherUtils();
 //        webSocketClientEndPoint = WebSocketClientEndPoint.getInstance();

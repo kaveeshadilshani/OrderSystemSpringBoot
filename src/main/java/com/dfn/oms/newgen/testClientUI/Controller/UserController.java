@@ -10,13 +10,14 @@ import com.dfn.oms.newgen.testClientUI.bean.JMSComponent.JMSSender;
 import com.dfn.oms.newgen.testClientUI.bean.CreateOrderComponent.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import static com.dfn.oms.newgen.testClientUI.bean.CreateOrderComponent.WebSocketClientEndPoint.responseCount;
 
+import static com.dfn.oms.newgen.testClientUI.bean.CreateOrderComponent.WebSocketClientEndPoint.responseCount;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import static com.dfn.oms.newgen.testClientUI.Controller.OrderController.*;
+import static com.dfn.oms.newgen.testClientUI.bean.WebSocketClientEndPoint.responseCount;
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
@@ -36,11 +37,10 @@ public class UserController {
     public static JMSRepository jmsRepository;
     public static HashMap<String, AmendOrder> hashMap_amendOrder = new HashMap<>();
     public static HashMap<String, CancelOrder> hashMap_cancelOrder = new HashMap<>();
-   public static HashMap<String, OrdersPerTimeSlice> hashMap_ordersPerTimeSlice = new HashMap<>();
+    public static HashMap<String, OrdersPerTimeSlice> hashMap_ordersPerTimeSlice = new HashMap<>();
+    public static GatewayUser gatewayUser = new GatewayUser();
 
-
-    @GetMapping("/users/home")
-    public List<User> getUsers() {
+  @GetMapping("/users/home")    public List<User> getUsers() {
         return (List<User>) userRepository.findAll();
     }
 
@@ -62,17 +62,19 @@ public class UserController {
 //            System.err.println("client exception...: " + ex);
 //        }
     }
-    @GetMapping("/users/params")
-    public List<OrderParams> getParams() {
-        // OrderParams orderParams =new OrderParams("sgdh","shgdh","ghdhgs");
-        //  parameterRepository.save(orderParams);
+ @PostMapping("/users/home/gw")
+    void addGwUser(@RequestBody GatewayUser gwUser){
+        this.gatewayUser = gwUser;
+        System.out.println("Successfully Connected..");
+    }
+
+    @GetMapping("/params")    public List<OrderParams> getParams() {
         return (List<OrderParams>) parameterRepository.findAll();
     }
 
     @PostMapping("/users/params")
     void addParams(@RequestBody OrderParams orderParams) {
 
-        // System.out.println("fjhjsfhjjh");
         orderParams.setId((long)i);
         i++;
         parameterRepository.save(orderParams);
