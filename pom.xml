@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>NTPTestClientUI</artifactId>
     <name>NTPTestClientUI</name>
-    <description>hello-springboot</description>
+    <description>NTPTestClientUI</description>
     <packaging>jar</packaging>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -181,6 +181,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.dfn.oms.newgen.testClientUI.WebApplication</mainClass>
+                </configuration>
             </plugin>
         </plugins>
     </build>

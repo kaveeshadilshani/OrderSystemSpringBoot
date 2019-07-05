@@ -557,7 +557,7 @@ if(false) {}
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\kaveeshad\Documents\springbootAngular\ang-app\src\styles.css */"./src/styles.css");
+module.exports = __webpack_require__(/*! C:\Users\kaveeshad\Documents\springbootAngular\FrontEnd\OrderSystemAngular\src\styles.css */"./src/styles.css");
 
 
 /***/ })
