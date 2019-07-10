@@ -1,48 +1,34 @@
 package com.dfn.oms.newgen.testClientUI.bean;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
-@Entity
+//@Entity
 public class GatewayUser {
 
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
     private String ip;
     private int port;
     private int endpoint;
     private int repeatCount;
-    private boolean periodically;
+    private boolean sendFileContent;
+    private boolean isTimeBounded;
+    private boolean isRated;
+//    private boolean isCountEnabled;
     private int requestsPerSec;
-    private int timeConstraintHour;
     private int timeConstraintMin;
+    private int msgCount;
 
-    public GatewayUser(){}
+    public GatewayUser(String ip, int port, int endpoint, int repeatCount, boolean sendFileContent, int requestsPerSec
+            , boolean isTimeBounded, boolean isRated, int timeConstraintMin, int msgCount){
 
-    public GatewayUser(long id, String ip,int port, int endpoint,int repeatCount, boolean periodically,int requestsPerSec
-            ,int timeConstraintHour, int timeConstraintMin){
-
-        this.id = id;
         this.ip = ip;
         this.port = port;
         this.endpoint = endpoint;
         this.repeatCount = repeatCount;
-        this.periodically = periodically;
-        this.requestsPerSec = requestsPerSec;
-        this.timeConstraintHour = timeConstraintHour;
+        this.sendFileContent = sendFileContent;
+        this.isTimeBounded = isTimeBounded;
+        this.isRated = isRated;
+//        this.isCountEnabled = isCountEnabled;
         this.timeConstraintMin = timeConstraintMin;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
+        this.requestsPerSec = requestsPerSec;
+        this.msgCount = msgCount;
     }
 
     public String getIp() {
@@ -77,14 +63,6 @@ public class GatewayUser {
         this.repeatCount = repeatCount;
     }
 
-    public boolean isPeriodically() {
-        return periodically;
-    }
-
-    public void setPeriodically(boolean periodically) {
-        this.periodically = periodically;
-    }
-
     public int getRequestsPerSec() {
         return requestsPerSec;
     }
@@ -94,12 +72,44 @@ public class GatewayUser {
     }
 
 
-    public int getTimeConstraintHour() {
-        return timeConstraintHour;
+    public boolean isSendFileContent() {
+        return sendFileContent;
     }
 
-    public void setTimeConstraintHour(int timeConstraintHour) {
-        this.timeConstraintHour = timeConstraintHour;
+    public void setSendFileContent(boolean sendFileContent) {
+        this.sendFileContent = sendFileContent;
+    }
+
+    public boolean isTimeBounded() {
+        return isTimeBounded;
+    }
+
+    public void setTimeBounded(boolean timeBounded) {
+        isTimeBounded = timeBounded;
+    }
+
+    public boolean isRated() {
+        return isRated;
+    }
+
+    public void setRated(boolean rated) {
+        isRated = rated;
+    }
+//
+//    public boolean isCountEnabled() {
+//        return isCountEnabled;
+//    }
+//
+//    public void setCountEnabled(boolean countEnabled) {
+//        isCountEnabled = countEnabled;
+//    }
+
+    public int getMsgCount() {
+        return msgCount;
+    }
+
+    public void setMsgCount(int msgCount) {
+        this.msgCount = msgCount;
     }
 
     public int getTimeConstraintMin() {

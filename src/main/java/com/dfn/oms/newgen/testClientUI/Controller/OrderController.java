@@ -186,7 +186,8 @@ public class OrderController {
             settings.setPort(UserController.userRepository.findById((long) noOfRequests).get().getPort());
 //            settings.setGWClient(hashMap_ordersPerTimeSlice.get(Integer.toString(hashMap_ordersPerTimeSlice.size()-1)).isGWClient());
             settings.setGWClient(isGWClient);
-            settings.setNumOfEndPoints(UserController1.userRepository1.findById((long) noOfRequests).get().getEndpoint());            System.out.println(settings.getIp());
+            settings.setNumOfEndPoints(UserController.userRepository.findById((long) noOfRequests).get().getEndpoint());
+            System.out.println(settings.getIp());
             if(clientEndPoints!= null){
                 clientEndPoints.clear();
             }
@@ -254,7 +255,8 @@ public class OrderController {
         loginBeanMap.get(1).getCommonHeader().setUnqReqId(requestIdLogin);
         //otherUtils.create_sessions(loginBeanMap);
         webSocketClientEndPoint.sendMessage(loginBeanMap.get(1));
-        ResponseBean<LoginResDataBean> responseBean = messageHandler.getResponseDetails(webSocketClientEndPoint, loginBeanMap.get(1).getCommonHeader().getUnqReqId(),1);
+        ResponseBean<LoginResDataBean> responseBean = messageHandler.getResponseDetails(webSocketClientEndPoint,
+                loginBeanMap.get(1).getCommonHeader().getUnqReqId(),1);
         System.out.println("sessionID :" +responseBean.getCommonHeader().getSesnId());
         sessionID = responseBean.getCommonHeader().getSesnId();
     }

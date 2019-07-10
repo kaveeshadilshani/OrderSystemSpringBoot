@@ -1,23 +1,24 @@
 package com.dfn.oms.newgen.testClientUI.Controller;
 
+import com.dfn.oms.newgen.testClientUI.GatewayLoadController;
 import com.dfn.oms.newgen.testClientUI.Repository.JMSRepository;
 import com.dfn.oms.newgen.testClientUI.Repository.ParameterRepository;
 import com.dfn.oms.newgen.testClientUI.Repository.UserRepository;
 import com.dfn.oms.newgen.testClientUI.bean.AmendCancelComponent.AmendOrder;
 import com.dfn.oms.newgen.testClientUI.bean.AmendCancelComponent.CancelOrder;
+import com.dfn.oms.newgen.testClientUI.bean.CreateOrderComponent.*;
+import com.dfn.oms.newgen.testClientUI.bean.GatewayUser;
 import com.dfn.oms.newgen.testClientUI.bean.JMSComponent.JMS;
 import com.dfn.oms.newgen.testClientUI.bean.JMSComponent.JMSSender;
-import com.dfn.oms.newgen.testClientUI.bean.CreateOrderComponent.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import static com.dfn.oms.newgen.testClientUI.bean.CreateOrderComponent.WebSocketClientEndPoint.responseCount;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import static com.dfn.oms.newgen.testClientUI.Controller.OrderController.*;
-import static com.dfn.oms.newgen.testClientUI.bean.WebSocketClientEndPoint.responseCount;
+import static com.dfn.oms.newgen.testClientUI.bean.CreateOrderComponent.WebSocketClientEndPoint.responseCount;
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
@@ -38,7 +39,7 @@ public class UserController {
     public static HashMap<String, AmendOrder> hashMap_amendOrder = new HashMap<>();
     public static HashMap<String, CancelOrder> hashMap_cancelOrder = new HashMap<>();
     public static HashMap<String, OrdersPerTimeSlice> hashMap_ordersPerTimeSlice = new HashMap<>();
-    public static GatewayUser gatewayUser = new GatewayUser();
+    public static GatewayUser gatewayUser;
 
   @GetMapping("/users/home")    public List<User> getUsers() {
         return (List<User>) userRepository.findAll();
@@ -64,8 +65,11 @@ public class UserController {
     }
  @PostMapping("/users/home/gw")
     void addGwUser(@RequestBody GatewayUser gwUser){
-        this.gatewayUser = gwUser;
+        this.gatewayUser = new GatewayUser(gwUser.getIp(),gwUser.getPort(),gwUser.getEndpoint(),gwUser.getRepeatCount(),
+                gwUser.isSendFileContent(),gwUser.getRequestsPerSec(),gwUser.isTimeBounded(),gwUser.isRated(),
+                gwUser.getTimeConstraintMin(),gwUser.getMsgCount());
 
+     GatewayLoadController.queueUpMsgs(gwUser);
         System.out.println("Successfully Connected..");
     }
 

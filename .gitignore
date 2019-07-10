@@ -5,3 +5,5 @@ out
 .project
 .idea
 *.iml
+application.log
+application.log.*

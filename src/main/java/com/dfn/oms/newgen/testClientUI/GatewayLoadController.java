@@ -1,6 +1,10 @@
 package com.dfn.oms.newgen.testClientUI;
 
-import com.dfn.oms.newgen.testClientUI.bean.*;
+import com.dfn.oms.newgen.testClientUI.Controller.UserController;
+import com.dfn.oms.newgen.testClientUI.bean.CreateOrderComponent.WebSocketClientEndPoint;
+import com.dfn.oms.newgen.testClientUI.bean.GatewayClient.*;
+import com.dfn.oms.newgen.testClientUI.bean.GatewayUser;
+import com.dfn.oms.newgen.testClientUI.bean.JMSComponent.LoginReqDataBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,30 +26,36 @@ public class GatewayLoadController {
 
     private int NUMBER_OF_MESSAGE_TYPES = 7;
     private boolean threadStatus = true;
-    private RequestBean [] reqBeanList = new RequestBean[NUMBER_OF_MESSAGE_TYPES] ;
+    private RequestBean[] reqBeanList = new RequestBean[NUMBER_OF_MESSAGE_TYPES] ;
     private WebSocketClientEndPoint webSocketClientEndPoint = new WebSocketClientEndPoint();
     private WebSocketClientEndPoint.MessageHandler messageHandler = new  WebSocketClientEndPoint.MessageHandler();
     public Map<String, RequestBean<LoginReqDataBean>> reqBeanMap = new HashMap<>() ;
     public static Map<String, ResponseBean<LoginResDataBean>> responseBeanMap = new HashMap<>();
 
+    public static List<RequestBean<LoginReqDataBean>> loginReqBeanList = new ArrayList<>();
+
     @PostMapping("/gatewayload")
     @ResponseStatus(value = HttpStatus.OK)
     public void gatwayLoadHandle(@RequestBody Map<Integer,Boolean> msgType){
 
+        Date date = new Date();
+        long stopTime = Integer.MAX_VALUE;
 
-        if(!UserController1.gatewayUser.isPeriodically()){
-            Date date = new Date();
-            long currentTime = date.getTime();
-            long stopTime = sum(sum(currentTime ,UserController1.gatewayUser.getTimeConstraintHour()*3600000),
-                    UserController1.gatewayUser.getTimeConstraintMin()*60000) ;
-            System.out.println(new Date(stopTime));
+        if(!UserController.gatewayUser.isSendFileContent()){
+
+            if(UserController.gatewayUser.isTimeBounded()){
+                long currentTime = date.getTime();
+                stopTime = sum(currentTime ,UserController.gatewayUser.getTimeConstraintMin()*60000) ;
+//            System.out.println(new Date(stopTime));
+            }
+
+        }else{
+            UserController.gatewayUser.setTimeBounded(false);
         }
+
 
         if(msgType.get(1)){
             System.out.println("==Login Message==");
-
-            reqBeanList[0] = new RequestBean();
-            List<LoginReqDataBean> reqDataBeanList = getReqDataBeans("src/main/resources/Logins.csv");
 
             try {
                 webSocketClientEndPoint = new WebSocketClientEndPoint(new URI("ws://192.168.0.50:9080/streaming-api"));
@@ -53,31 +63,61 @@ public class GatewayLoadController {
                 e.printStackTrace();
             }
 
-            if(!UserController1.gatewayUser.isPeriodically()){
-                for(int j=0;j<UserController1.gatewayUser.getRepeatCount();j++){
-                    for(int i=0;i<reqDataBeanList.size();i++){
-                        CommonHeader commonHeader = buildCommonHeader(1);
-                        RequestBean requestBean = new RequestBean();
-                        requestBean.setCommonHeader(commonHeader);
-                        requestBean.setDataBean(reqDataBeanList.get(i));
-                        webSocketClientEndPoint.sendMessage(requestBean);
+            for(int i=0;i<UserController.gatewayUser.getRepeatCount();i++){
+                if(!UserController.gatewayUser.isSendFileContent()){        //make it repeatable or run it once
+                    i = Integer.MAX_VALUE-1;
+                }
+
+                if(UserController.gatewayUser.isTimeBounded() && !UserController.gatewayUser.isSendFileContent()){  //time bound
+                    for(int j=0;j<loginReqBeanList.size();j++){
+                        if(UserController.gatewayUser.isRated() && (j+1)%UserController.gatewayUser.getRequestsPerSec()==0){
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        sendRequest(loginReqBeanList.get(j),webSocketClientEndPoint);
+                        Date now = new Date();
+                        if(now.getTime()>stopTime){
+                            j = Integer.MAX_VALUE-1;
+                        }else if(loginReqBeanList.size()-1 == j){
+                            j = 0;
+                        }
+                    }
+                }else if(!UserController.gatewayUser.isTimeBounded() && !UserController.gatewayUser.isSendFileContent()){   //count bound
+                    int initialMsgCount = UserController.gatewayUser.getMsgCount();
+                    for(int j=0;j<UserController.gatewayUser.getMsgCount();j++){
+                        if(UserController.gatewayUser.isRated() && (j+1)%UserController.gatewayUser.getRequestsPerSec()==0){
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        if(loginReqBeanList.size() == j){
+                            j=0;
+                            int msgCountTmp = UserController.gatewayUser.getMsgCount();
+                            UserController.gatewayUser.setMsgCount(msgCountTmp-loginReqBeanList.size());
+                        }
+                        sendRequest(loginReqBeanList.get(j),webSocketClientEndPoint);
+                    }
+                    UserController.gatewayUser.setMsgCount(initialMsgCount);
+                }else{
+                    for(int l=0;l<loginReqBeanList.size();l++){
+                        sendRequest(loginReqBeanList.get(l),webSocketClientEndPoint);
+                        if(UserController.gatewayUser.isRated() && (l+1)%UserController.gatewayUser.getRequestsPerSec()==0){
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     }
                 }
             }
 
 
-
-
-//            reqBeanMap =  fetchLoginDetails("src/main/java/com/dfn/oms/newgen/testClientUI/bean/Login.yaml");
-//
-//            try {
-//                webSocketClientEndPoint = new WebSocketClientEndPoint(new URI("ws://192.168.0.50:9080/streaming-api"));
-//            } catch (URISyntaxException e) {
-//                e.printStackTrace();
-//            }
-//            for (Map.Entry<String, RequestBean<LoginReqDataBean>> entry : reqBeanMap.entrySet()){
-//                webSocketClientEndPoint.sendMessage(entry.getValue());
-//            }
 
         }
         if(msgType.get(2)){
@@ -99,26 +139,45 @@ public class GatewayLoadController {
             System.out.println("==Portfolio Details Message==");
         }
 
-        if(OrderController.settings !=null && UserController1.userRepository1 != null){
-            long noOfRequests = UserController1.userRepository1.count();
-            for(int j=1; j<reqBeanList.length; j++) {
-                if(reqBeanList[j]!=null) {
-                    for (int i = 0; i < UserController1.userRepository1.findById(noOfRequests).get().getNoOfOrders(); i++) {
-                        if (OrderController.settings.getNumOfEndPoints() > 1) {
-                            OrderController.clientEndPoints.get(i % OrderController.settings.getNumOfEndPoints()).sendMessage(reqBeanList[j]);
-                        } else {
-                            OrderController.clientEndPoints.get(0).sendMessage(reqBeanList[j]);
-                        }
-                    }
-                }
-            }
-        }
+//        if(OrderController.settings !=null && UserController.userRepository != null){
+//            long noOfRequests = UserController.userRepository.count();
+//            for(int j=1; j<reqBeanList.length; j++) {
+//                if(reqBeanList[j]!=null) {
+//                    for (int i = 0; i < UserController.userRepository.findById(noOfRequests).get().getNoOfOrders(); i++) {
+//                        if (OrderController.settings.getNumOfEndPoints() > 1) {
+//                            OrderController.clientEndPoints.get(i % OrderController.settings.getNumOfEndPoints()).sendMessage(reqBeanList[j]);
+//                        } else {
+//                            OrderController.clientEndPoints.get(0).sendMessage(reqBeanList[j]);
+//                        }
+//                    }
+//                }
+//            }
+//        }
 
     }
 
+    public void sendRequest(RequestBean reqBean,WebSocketClientEndPoint webSocketClientEndPoint){
+        webSocketClientEndPoint.sendMessage(reqBean);
+    }
 
+    public static void queueUpMsgs(GatewayUser gwUser){
+        //Login requests queuing up
+        List<LoginReqDataBean> loginReqDataBeanList  =  getLoginReqDataBeans("src/main/resources/Logins.csv");
+        for(int i=0;i<loginReqDataBeanList.size();i++){
+            loginReqBeanList.add(buildRequest(1,loginReqDataBeanList.get(i)));
+        }
+    }
 
-    public CommonHeader buildCommonHeader(int msgType){
+    public static RequestBean buildRequest(int msgType, ReqData reqDataBean){
+        CommonHeader commonHeader = buildCommonHeader(msgType);
+        RequestBean requestBean = new RequestBean();
+        requestBean.setCommonHeader(commonHeader);
+        requestBean.setDataBean(reqDataBean);
+//        webSocketClientEndPoint.sendMessage(requestBean);
+        return requestBean;
+    }
+
+    public static CommonHeader buildCommonHeader(int msgType){
         CommonHeader commonHeader = new CommonHeader();
         commonHeader.setMsgTyp(msgType);
         commonHeader.setTenantCode("DEFAULT_TENANT");
@@ -141,7 +200,7 @@ public class GatewayLoadController {
         System.out.println("UnqReqID => "+unqReqId+"\n"+responseBean.getCommonHeader().getSesnId());
     }
 
-    public List<LoginReqDataBean> getReqDataBeans(String path){
+    public static List<LoginReqDataBean> getLoginReqDataBeans(String path){
         List<LoginReqDataBean> reqDataBeansList = new ArrayList<>();
         LoginReqDataBean dataBean ;
         String line = "";
@@ -164,24 +223,5 @@ public class GatewayLoadController {
 
         return reqDataBeansList;
     }
-
-//    public Map<String, RequestBean<LoginReqDataBean>> fetchLoginDetails(String path){
-//
-//        InputStream inputStream;
-//        ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
-//        List<RequestBean<LoginReqDataBean>> requestBeanlist = null;
-//        try {
-//            inputStream = new FileInputStream(path);
-//            requestBeanlist = yamlMapper.readValue(inputStream, new TypeReference<List<RequestBean<LoginReqDataBean>>>() {
-//            });
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        Map<String, RequestBean<LoginReqDataBean>> loginBeanMap = new HashMap<>();
-//        for (RequestBean<LoginReqDataBean> reqBean : requestBeanlist) {
-//            loginBeanMap.put(reqBean.getCommonHeader().getUnqReqId(), reqBean);
-//        }
-//        return loginBeanMap;
-//    }
 
 }
