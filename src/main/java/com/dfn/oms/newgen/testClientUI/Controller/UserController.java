@@ -10,6 +10,7 @@ import com.dfn.oms.newgen.testClientUI.bean.CreateOrderComponent.*;
 import com.dfn.oms.newgen.testClientUI.bean.GatewayUser;
 import com.dfn.oms.newgen.testClientUI.bean.JMSComponent.JMS;
 import com.dfn.oms.newgen.testClientUI.bean.JMSComponent.JMSSender;
+import net.minidev.json.JSONValue;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static com.dfn.oms.newgen.testClientUI.Controller.OrderController.*;
+import static com.dfn.oms.newgen.testClientUI.GatewayLoadController.loginReqBeanList;
 import static com.dfn.oms.newgen.testClientUI.bean.CreateOrderComponent.WebSocketClientEndPoint.responseCount;
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
@@ -40,6 +42,7 @@ public class UserController {
     public static HashMap<String, CancelOrder> hashMap_cancelOrder = new HashMap<>();
     public static HashMap<String, OrdersPerTimeSlice> hashMap_ordersPerTimeSlice = new HashMap<>();
     public static GatewayUser gatewayUser;
+    public static boolean readyState;
 
   @GetMapping("/users/home")    public List<User> getUsers() {
         return (List<User>) userRepository.findAll();
@@ -64,13 +67,20 @@ public class UserController {
 //        }
     }
  @PostMapping("/users/home/gw")
-    void addGwUser(@RequestBody GatewayUser gwUser){
+    Object addGwUser(@RequestBody GatewayUser gwUser){
         this.gatewayUser = new GatewayUser(gwUser.getIp(),gwUser.getPort(),gwUser.getEndpoint(),gwUser.getRepeatCount(),
                 gwUser.isSendFileContent(),gwUser.getRequestsPerSec(),gwUser.isTimeBounded(),gwUser.isRated(),
                 gwUser.getTimeConstraintMin(),gwUser.getMsgCount());
 
-     GatewayLoadController.queueUpMsgs(gwUser);
-        System.out.println("Successfully Connected..");
+        GatewayLoadController.queueUpMsgs(gwUser);
+        if(readyState){
+            System.out.println("Successfully Connected..");
+        }else{
+            System.out.println("Error occured in connecting..!");
+        }
+        String readyMessage = "{readyState :"+readyState+",loginReqBeanList :"+loginReqBeanList.size()+"}";
+        Object jsonReadyMessage = JSONValue.parse(readyMessage);
+        return jsonReadyMessage;
     }
 
     @GetMapping("/params")    public List<OrderParams> getParams() {

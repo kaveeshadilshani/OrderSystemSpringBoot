@@ -6,10 +6,7 @@ import com.dfn.oms.newgen.testClientUI.bean.GatewayClient.*;
 import com.dfn.oms.newgen.testClientUI.bean.GatewayUser;
 import com.dfn.oms.newgen.testClientUI.bean.JMSComponent.LoginReqDataBean;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -25,7 +22,7 @@ import static java.lang.Long.sum;
 public class GatewayLoadController {
 
     private int NUMBER_OF_MESSAGE_TYPES = 7;
-    private boolean threadStatus = true;
+    private boolean threadStatus = true;    // TODO properly implement this with applying threads
     private RequestBean[] reqBeanList = new RequestBean[NUMBER_OF_MESSAGE_TYPES] ;
     private WebSocketClientEndPoint webSocketClientEndPoint = new WebSocketClientEndPoint();
     private WebSocketClientEndPoint.MessageHandler messageHandler = new  WebSocketClientEndPoint.MessageHandler();
@@ -40,12 +37,17 @@ public class GatewayLoadController {
 
         Date date = new Date();
         long stopTime = Integer.MAX_VALUE;
+        threadStatus = true;
 
         if(!UserController.gatewayUser.isSendFileContent()){
 
             if(UserController.gatewayUser.isTimeBounded()){
                 long currentTime = date.getTime();
-                stopTime = sum(currentTime ,UserController.gatewayUser.getTimeConstraintMin()*60000) ;
+                if(UserController.gatewayUser.getTimeConstraintMin()<0){
+                    stopTime = 0;
+                }else{
+                    stopTime = sum(currentTime ,UserController.gatewayUser.getTimeConstraintMin()*60000) ;
+                }
 //            System.out.println(new Date(stopTime));
             }
 
@@ -64,7 +66,7 @@ public class GatewayLoadController {
             }
 
             for(int i=0;i<UserController.gatewayUser.getRepeatCount();i++){
-                if(!UserController.gatewayUser.isSendFileContent()){        //make it repeatable or run it once
+                if(!UserController.gatewayUser.isSendFileContent() || !threadStatus){        //make it repeatable or run it once
                     i = Integer.MAX_VALUE-1;
                 }
 
@@ -79,7 +81,7 @@ public class GatewayLoadController {
                         }
                         sendRequest(loginReqBeanList.get(j),webSocketClientEndPoint);
                         Date now = new Date();
-                        if(now.getTime()>stopTime){
+                        if((now.getTime()>stopTime && stopTime!=0) || !threadStatus){  //TODO remove these and properly implement with threads
                             j = Integer.MAX_VALUE-1;
                         }else if(loginReqBeanList.size()-1 == j){
                             j = 0;
@@ -100,6 +102,9 @@ public class GatewayLoadController {
                             int msgCountTmp = UserController.gatewayUser.getMsgCount();
                             UserController.gatewayUser.setMsgCount(msgCountTmp-loginReqBeanList.size());
                         }
+                        if(!threadStatus){
+                            j = Integer.MAX_VALUE-1; //TODO remove these and properly implement with threads
+                        }
                         sendRequest(loginReqBeanList.get(j),webSocketClientEndPoint);
                     }
                     UserController.gatewayUser.setMsgCount(initialMsgCount);
@@ -112,6 +117,9 @@ public class GatewayLoadController {
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
+                        }
+                        if(!threadStatus){
+                            l = Integer.MAX_VALUE-1;    //TODO remove these and properly implement with threads
                         }
                     }
                 }
@@ -156,6 +164,11 @@ public class GatewayLoadController {
 
     }
 
+    @GetMapping("/stopsending")
+    public void killReqSending(){
+        threadStatus = false;
+    }
+
     public void sendRequest(RequestBean reqBean,WebSocketClientEndPoint webSocketClientEndPoint){
         webSocketClientEndPoint.sendMessage(reqBean);
     }
@@ -163,6 +176,7 @@ public class GatewayLoadController {
     public static void queueUpMsgs(GatewayUser gwUser){
         //Login requests queuing up
         List<LoginReqDataBean> loginReqDataBeanList  =  getLoginReqDataBeans("src/main/resources/Logins.csv");
+        loginReqBeanList.clear();
         for(int i=0;i<loginReqDataBeanList.size();i++){
             loginReqBeanList.add(buildRequest(1,loginReqDataBeanList.get(i)));
         }
@@ -215,10 +229,13 @@ public class GatewayLoadController {
                   reqDataBeansList.add(dataBean);
               }
             }
+            UserController.readyState = true;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            UserController.readyState = false;
         } catch (IOException e) {
             e.printStackTrace();
+            UserController.readyState = false;
         }
 
         return reqDataBeansList;
